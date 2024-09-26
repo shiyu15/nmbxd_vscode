@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32">
+<path d="M0,0 L14,0 L16,3 L16,8 L7,11 L3,15 L4,16 L4,25 L0,26 Z M3,2 L3,6 L6,8 L9,5 L8,2 Z " fill="#000000" transform="translate(0,0)"/>
+<path d="M0,0 L15,0 L15,14 L10,12 L5,9 L1,7 L2,3 Z M8,4 L8,8 L11,10 L14,7 L13,4 Z " fill="#000000" transform="translate(17,0)"/>
+<path d="M0,0 L1,2 L3,3 L1,3 L0,5 L0,3 L-2,2 L0,2 Z " fill="#000000" transform="translate(23,15)"/>
+<path d="M0,0 L2,0 L2,12 L-1,9 L-1,1 Z " fill="#000000" transform="translate(30,15)"/>
+<path d="M0,0 L1,0 L1,5 L0,5 Z " fill="#000000" transform="translate(12,18)"/>
+<path d="M0,0 L1,0 L1,5 L0,5 Z " fill="#000000" transform="translate(20,18)"/>
+<path d="M0,0 Z " fill="#000000" transform="translate(26,18)"/>
+<path d="M0,0 Z " fill="#000000" transform="translate(25,19)"/>
+<path d="M0,0 Z " fill="#000000" transform="translate(27,19)"/>
+<path d="M0,0 Z " fill="#000000" transform="translate(24,20)"/>
+<path d="M0,0 L2,1 Z " fill="#000000" transform="translate(25,21)"/>
+<path d="M0,0 L3,2 L2,5 L0,5 Z " fill="#000000" transform="translate(0,27)"/>
+<path d="M0,0 Z " fill="#000000" transform="translate(15,27)"/>
+<path d="M0,0 Z " fill="#000000" transform="translate(17,27)"/>
+<path d="M0,0 Z " fill="#000000" transform="translate(16,28)"/>
+<path d="M0,0 L1,4 L-1,3 Z " fill="#000000" transform="translate(31,28)"/>
+<path d="M0,0 Z " fill="#000000" transform="translate(11,29)"/>
+<path d="M0,0 Z " fill="#000000" transform="translate(15,29)"/>
+<path d="M0,0 Z " fill="#000000" transform="translate(17,29)"/>
+<path d="M0,0 Z " fill="#000000" transform="translate(21,29)"/>
+<path d="M0,0 Z " fill="#000000" transform="translate(12,30)"/>
+<path d="M0,0 Z " fill="#000000" transform="translate(20,30)"/>
+<path d="M0,0 Z " fill="#000000" transform="translate(13,31)"/>
+<path d="M0,0 Z " fill="#000000" transform="translate(19,31)"/>
+</svg>

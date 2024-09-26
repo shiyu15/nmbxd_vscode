@@ -1,10 +1,10 @@
 {
-  "name": "nmbnd",
-  "displayName": "nmbnd",
+  "name": "nmbxd",
+  "displayName": "nmbxd",
   "description": "a vscode plugin for ndnmb",
   "version": "0.0.1",
   "engines": {
-    "vscode": "^1.92.0"
+    "vscode": "^1.90.0"
   },
   "categories": [
     "Other"
@@ -14,10 +14,48 @@
   "contributes": {
     "commands": [
       {
-        "command": "nmbnd.helloWorld",
+        "command": "nmbxd.helloWorld",
         "title": "Hello World"
+      },
+      {
+        "command": "nmbxd.login",
+        "title": "登录",
+        "icon": "./images/login.svg"
+      },
+      {
+        "command": "nmbxd.forumItemClick",
+        "title": "版面点击"
       }
-    ]
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "nmbxd.login",
+          "when": "view==nmbxdForumList"
+        }
+      ]
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "forum",
+          "title": "匿名版x岛",
+          "icon": "./images/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "forum": [
+        {
+          "id": "nmbxdForumList",
+          "name": "版面列表"
+        },
+        {
+          "id": "nmbxdFavorites",
+          "name": "收藏"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
@@ -28,14 +66,20 @@
     "test": "vscode-test"
   },
   "devDependencies": {
-    "@types/vscode": "^1.92.0",
     "@types/mocha": "^10.0.7",
     "@types/node": "20.x",
-    "@typescript-eslint/eslint-plugin": "^7.14.1",
-    "@typescript-eslint/parser": "^7.11.0",
-    "eslint": "^8.57.0",
-    "typescript": "^5.4.5",
+    "@types/vscode": "^1.92.0",
+    "@typescript-eslint/eslint-plugin": "^7.18.0",
+    "@typescript-eslint/parser": "^7.18.0",
     "@vscode/test-cli": "^0.0.9",
-    "@vscode/test-electron": "^2.4.0"
+    "@vscode/test-electron": "^2.4.0",
+    "eslint": "^8.57.0",
+    "typescript": "^5.6.2",
+    "typescript-eslint-parser": "^22.0.0"
+  },
+  "dependencies": {
+    "axios": "^1.7.7",
+    "eta": "^3.5.0",
+    "path": "^0.12.7"
   }
 }

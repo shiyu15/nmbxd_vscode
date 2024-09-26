@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+    <html lang="en"></html>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+        <title>
+            <%= it.topicList[0].name %>        
+        </title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <base href="https://www.nmbxd1.com" />
+        <link rel="stylesheet" href="<%= it.contextPath %>/src/templates/common.css" />
+        <link rel="stylesheet" href="<%= it.contextPath %>/src/templates/topic.css" />
+    </head>
+<body>
+    <div class="container">
+    <!-- 标题 -->
+    <div class="topic-header">
+        <h1><a href="/f/<%= it.topicList.name %>"><%= it.topicList[0].name %></a></h1>
+        <!-- <img src="{{authorAvatar}}" alt="avatar" /> -->
+    </div>
+
+    <% for (const topic of it.topicList){ %>
+        <!-- 作者、时间、帖子号 --> 
+        <div class="topic-meta">
+            <span>ID:<%= topic.userHash %></span>
+            <span>No.<%= topic.id %></span>
+            <span><%= topic.now %></span>
+            <span>回复数:<%= topic.replyCount %></span>
+            <span style="margin-left: 10px">打开</span>
+            <a class="node" href="/t/<%= topic.id %>">浏览器中打开</a>
+        </div>
+        
+        <!-- 正文 -->
+        <% if (topic.content) { %>
+        <div class="topic-content"><%= topic.content %></div>
+        <% } else { %>
+        <div class="topic-content"></div>
+        <% } %>
+
+        <% if (topic.replies.length) { %>
+        <p>共<%= topic.replies.length %>条回复</p>
+        <% } %>
+
+
+
+        <!-- 评论 -->
+        <div class="reply">
+            <% if (topic.replies.length) { %>
+            <h2>共 <%= topic.replyCount %> 条回复</h2>
+            <% } else { %>
+            <h2>暂无回复</h2>
+            <% } %>
+
+            <!-- 列表 -->
+            <% for (const reply of topic.replies){ %>
+                <div class="reply-item">
+                    <!-- 作者、时间、帖子号 --> 
+                    <div class="topic-meta">
+                        <span>ID:<%= reply.userHash %></span>
+                        <span>No.<%= reply.id %></span>
+                        <span><%= reply.now %></span>
+                        <!-- <a class="node" href="/t/{{ reply.id }}">浏览器中打开</a> -->
+                    </div>
+                    
+                    <!-- 正文 -->
+                    <% if (reply.content) { %>
+                    <div class="topic-content"><%= reply.content %></div>
+                    <% } else { %>
+                    <div class="topic-content"></div>
+                    <% } %>
+                
+                </div>
+                <hr />
+            <% } %>
+        </div>
+
+    <div></div>
+
+    <% } %>
+    
+
+</body>
+</html>

@@ -1,6 +1,6 @@
-# nmbnd README
+# nmbxd README
 
-This is the README for your extension "nmbnd". After writing up a brief description, we recommend including the following sections.
+This is the README for your extension "nmbxd". After writing up a brief description, we recommend including the following sections.
 
 ## Features
 
