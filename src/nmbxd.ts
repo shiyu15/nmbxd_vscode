@@ -69,6 +69,9 @@ export class NMBXD {
                 [] as TopicList[],
                 topic.sage,
                 topic.hide,
+                topic.ReplyCount,
+                topic.img,
+                topic.ext,
             );
             for(const reply of topic.Replies){
                 newTopic.replies.push(new TopicList(
@@ -81,6 +84,9 @@ export class NMBXD {
                     [] as TopicList[],
                     reply.sage,
                     reply.hide,
+                    topic.ReplyCount,
+                    topic.img,
+                    topic.ext,
                 ));
             }
             topicList.push(newTopic);

@@ -21,8 +21,13 @@ export class TopicList{
 
     public hide:boolean=false;
 
+    public img:string="";
+
+    public ext:string="";
+
     constructor(name:string, id: string = "", fid: string = "", now: string="", userHash:string="",
-        content:string, replyList: TopicList[], sage:boolean, hide:boolean) {
+        content:string, replyList: TopicList[], sage:boolean, hide:boolean, replyCount:number,
+        img:string, ext:string) {
         this.name=name;
         this.id = id;
         this.fid= fid;
@@ -32,6 +37,8 @@ export class TopicList{
         this.replies=replyList;
         this.sage=sage;
         this.hide = hide;
-        this.replyCount=this.replies.length;
+        this.replyCount=replyCount;
+        this.img=img;
+        this.ext=ext;
     }
 }

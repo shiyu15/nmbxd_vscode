@@ -1,16 +1,29 @@
-// See https://go.microsoft.com/fwlink/?LinkId=733558
-// for the documentation about the tasks.json format
 {
 	"version": "2.0.0",
 	"tasks": [
 		{
+			"label": "npm: watch",
 			"type": "npm",
 			"script": "watch",
 			"problemMatcher": "$tsc-watch",
 			"isBackground": true,
 			"presentation": {
 				"reveal": "never"
-			},
+			}
+		},
+		{
+			"label": "Compile LESS",
+			"type": "shell",
+			"command": "bash",
+			"args": [
+				"-c",
+				"lessc src/templates/topicList.less src/templates/topicList.css"
+			],
+			"problemMatcher": []
+		},
+		{
+			"label": "build all",
+			"dependsOn": [ "Compile LESS","npm: watch"], // 依赖两个任务
 			"group": {
 				"kind": "build",
 				"isDefault": true

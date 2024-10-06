@@ -41,3 +41,12 @@
 * Reduce the extension size and improve the startup time by [bundling your extension](https://code.visualstudio.com/api/working-with-extensions/bundling-extension).
 * [Publish your extension](https://code.visualstudio.com/api/working-with-extensions/publishing-extension) on the VS Code extension marketplace.
 * Automate builds by setting up [Continuous Integration](https://code.visualstudio.com/api/working-with-extensions/continuous-integration).
+
+## Todo list
+
+- [ ] 1. 显示图片
+- [ ] 2. 版块列表添加时间线
+- [ ] 3. 添加代理
+- [ ] 4. 登录功能
+- [ ] 5. 显示收藏列表
+- [ ] 6. 回帖
