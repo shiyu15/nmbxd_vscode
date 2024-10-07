@@ -84,9 +84,9 @@ export class NMBXD {
                     [] as TopicList[],
                     reply.sage,
                     reply.hide,
-                    topic.ReplyCount,
-                    topic.img,
-                    topic.ext,
+                    reply.ReplyCount,
+                    reply.img,
+                    reply.ext,
                 ));
             }
             topicList.push(newTopic);
@@ -132,8 +132,8 @@ export class NMBXD {
                 false,
                 false,
                 0,
-                topic.img,
-                topic.ext,
+                reply.img,
+                reply.ext,
             ));
             topicList.push(newTopic);
         }   

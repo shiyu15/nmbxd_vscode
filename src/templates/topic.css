@@ -3,57 +3,49 @@
   margin: 0;
   padding: 0;
 }
-
 html,
 body {
-  font-size: 14px;
+  font-size: 16px;
   margin: 0;
   padding: 0;
 }
-
 a {
   text-decoration: none;
 }
-
+blockquote {
+  margin: 1em 3em;
+  padding: 0.5em 1em;
+  border-left: 5px solid #fce27c;
+  background-color: #f6ebc1;
+}
+blockquote p {
+  margin: 0;
+}
 hr {
-  margin: 20px 0;
+  margin: 10px 0;
   border: none;
   height: 1px;
   background-color: var(--vscode-editorIndentGuide-background);
 }
-
-blockquote {
-  margin: 1em 3em;
-  padding: .5em 1em;
-  border-left: 5px solid #fce27c;
-}
-
-blockquote p {
-  margin: 0;
-}
-
-.quote-url {
-  margin: 1em 3em;
-  padding: .5em 1em;
-}
-
-.container {
+.forum {
   min-width: 400px;
   max-width: 700px;
   padding: 20px;
-  margin: 0 auto;
+  margin: 5px auto;
+  flex-direction: column;
 }
-
+.topic {
+  padding: 5px 10px 5px;
+  margin-bottom: 10px;
+}
 .topic-header {
   display: flex;
   flex-direction: row;
   align-items: center;
 }
-
 .topic-header h1 {
   flex: 1;
 }
-
 .topic-header img {
   width: 73px;
   height: 73px;
@@ -61,121 +53,112 @@ blockquote p {
   flex-shrink: 0;
   border-radius: 4px;
 }
-
 .topic-meta {
   display: flex;
   align-items: center;
-  margin-top: 10px;
 }
-
-.topic-meta .node {
-  flex-shrink: 0;
-  border-radius: 4px;
-  padding: 5px 10px;
-  background-color: var(--vscode-editor-inactiveSelectionBackground);
-  color: var(--vscode-editor-foreground);
+.topic-meta .userHash {
+  margin-left: 0px;
+  color: aqua;
 }
-
-.topic-meta .user {
+.topic-meta .topicId {
   margin-left: 10px;
 }
-
 .topic-meta .time {
-  margin-left: 10px;
   opacity: 0.5;
+  margin-left: auto;
 }
-
+.topic-meta .open {
+  margin-left: 10px;
+  color: #4daafc;
+}
+.topic-meta .forumName {
+  margin-left: 10px;
+  color: aqua;
+}
 .topic-meta .onlyAuthor {
   margin-left: 10px;
 }
-
 .topic-meta .hidden {
   display: none;
 }
-
-.topic-content {
+.topic-meta .floorNum {
+  margin-left: 10px;
+}
+.content {
+  display: flex;
+  flex-direction: row;
+}
+.word-content {
   line-height: 1.5;
   word-break: break-all;
   overflow-wrap: break-word;
+  margin-left: 10px;
 }
-
-.topic-content p {
+.word-content p {
   margin: 10px 0;
 }
-
-.topic-content a {
+.word-content a {
   word-break: break-all;
 }
-
-.topic-content img {
+.word-content img {
   max-width: 100% !important;
 }
-
-.topic-content pre {
+.word-content pre {
   font-family: inherit;
   white-space: pre;
   word-break: break-all;
 }
-
-.topic-content code {
+.word-content code {
   font-family: inherit;
   white-space: pre-wrap;
   word-break: break-all;
 }
-
-.topic-content.append h2 {
+.word-content.append h2 {
   padding-bottom: 10px;
 }
-
+.right {
+  margin-left: auto;
+}
 .topic-toolbar {
   margin-top: 20px;
   display: flex;
   flex-direction: row;
 }
-
 .topic-toolbar .op {
   margin-right: 10px;
 }
-
 .topic-toolbar .text {
-  opacity: 1;
+  opacity: 0.5;
 }
-
-.topic-toolbar .text+.text {
+.topic-toolbar .text + .text {
   padding-left: 10px;
 }
-
 .topic-toolbar .count {
   margin-left: auto;
 }
-
 .reply h2 {
   padding-bottom: 10px;
 }
-
 .reply-item {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
 }
-
 .reply-item .avatar {
   width: 48px;
   height: 48px;
   border-radius: 4px;
   margin-right: 10px;
 }
-
 .reply-item-wrap {
   flex: 1;
   overflow: hidden;
 }
-
 .reply-item-wrap .meta {
   display: flex;
   flex-direction: row;
   align-items: center;
 }
-
 .reply-item-wrap .meta .user--author::after {
   content: '楼主';
   padding: 1px;
@@ -189,18 +172,15 @@ blockquote p {
   align-items: center;
   justify-content: center;
 }
-
 .reply-item-wrap .meta .time {
   padding-left: 10px;
   opacity: 0.5;
 }
-
 .reply-item-wrap .meta .thanks {
   padding-left: 10px;
   flex: 1;
   opacity: 1;
 }
-
 .reply-item-wrap .meta .floor {
   margin-left: auto;
   font-size: 10px;
@@ -214,11 +194,9 @@ blockquote p {
   background-color: var(--vscode-editor-inactiveSelectionBackground);
   padding: 0 5px;
 }
-
 .reply-item-wrap .content {
   margin-top: 5px;
 }
-
 .post-reply textarea {
   display: block;
   width: 100%;
@@ -234,7 +212,6 @@ blockquote p {
   background-color: transparent;
   color: var(--vscode-editor-foreground);
 }
-
 .post-reply .submit {
   margin-top: 10px;
   border: none;
@@ -248,71 +225,20 @@ blockquote p {
   color: var(--vscode-editor-foreground);
   cursor: pointer;
 }
-
 .page {
-	width:auto;
-	text-align:center;
-	/* height:50px; */
-	/*border:1px solid #F33; */
-	/*也可以这样设置,不过border和box-shadow还是有一定区别的,border占据空间,而box-shadow不占据空间*/
-	/* box-shadow:0 0 2px red; */
-	margin:0 auto;
+  width: auto;
+  text-align: center;
+  /*border:1px solid #F33; */
+  /*也可以这样设置,不过border和box-shadow还是有一定区别的,border占据空间,而box-shadow不占据空间*/
+  /* box-shadow:0 0 2px red; */
+  margin: 0 auto;
 }
-
 .page a {
-	/* font-size:20px; */
-	/* color:#262626; */
-	/* margin-top:10px; */
-	/* line-height:50px; */
-	/* text-decoration:none; */
-	/*border:1px solid #F33; */
-	/*也可以这样设置,不过border和box-shadow还是有一定区别的,border占据空间,而box-shadow不占据空间*/
-	/* box-shadow:0 0 2px red; */
-	padding:8px;
-	margin:10px;
-}
-
-.label1 {
-  border-radius: 0.25em;
-  padding: 0 0.4em 0.05em 0.4em;
-  display: inline-block;
-  background: #315635;
-  color: #fff;
-  margin: 0.1em 0.2em;
-}
-
-.label2 {
-  border-radius: 0.25em;
-  padding: 0 0.4em 0.05em 0.4em;
-  display: inline-block;
-  background: #782773;
-  color: #fff;
-  margin: 0.1em 0.2em;
-}
-
-.label3 {
-  border-radius: 0.25em;
-  padding: 0 0.4em 0.05em 0.4em;
-  display: inline-block;
-  background: #8a242d;
-  color: #fff;
-  margin: 0.1em 0.2em;
-}
-
-.label4 {
-  border-radius: 0.25em;
-  padding: 0 0.4em 0.05em 0.4em;
-  display: inline-block;
-  background: #b79f80;
-  color: #fff;
-  margin: 0.1em 0.2em;
-}
-
-.label5 {
-  border-radius: 0.25em;
-  padding: 0 0.4em 0.05em 0.4em;
-  display: inline-block;
-  background: #4d50b8;
-  color: #fff;
-  margin: 0.1em 0.2em;
+  /* color:#262626; */
+  /* text-decoration:none; */
+  /*border:1px solid #F33; */
+  /*也可以这样设置,不过border和box-shadow还是有一定区别的,border占据空间,而box-shadow不占据空间*/
+  /* box-shadow:0 0 2px red; */
+  padding: 8px;
+  margin: 10px;
 }
