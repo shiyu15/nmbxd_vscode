@@ -5,7 +5,6 @@ import { Forum, ForumData } from '../models/forum';
 import { TopicList } from '../models/topicList';
 import * as vscode from "vscode";
 import {ForumItem} from "../provider/dataProvider";
-import {createTopicItem} from "./topicClick";
 
 const panels: { [key: string]: vscode.WebviewPanel } = {};
 
@@ -39,42 +38,17 @@ function _createPanel(id: string, label: string): vscode.WebviewPanel {
  * 点击子节点打开详情页面
  * @param item 话题的子节点
  */
-export function createForumItem(item: ForumItem){
+export function createTopicItem(topicList: TopicList){
   // 如果panel已经存在，则直接激活
-  let panel = panels[item.forumId];
+  let panel = panels[topicList.id];
   if (panel) {
     panel.reveal();
     return;
   }
-
-  panel = _createPanel(item.forumId, item.label as string);
-  panel.webview.onDidReceiveMessage((message) => {
-    switch (message.command) {
-      // case "setTitle":
-      //   panel.title = _getTitle(message.title);
-      //   break;
-      // case "refresh":
-      //   loadTopicInPanel(panel, item.link, message.page);
-      //   break;
-      // case "pageTurning":
-      //   loadTopicInPanel(panel, item.link, message.page);
-      //   break;
-      // case "collect":
-      //   collectPost(panel, topic);
-      //   break;
-      case "topicOpen":
-        createTopicItem(message.topic);
-        break;
-      default:
-        break;
-    }
-  });
-
-
-
-
-  console.log(item.forumId);
-  loadTopicListInPanel(panel, item, 1);
+  let label=topicList.content.length>10?topicList.content.substring(0,10):topicList.content;
+  panel = _createPanel(topicList.id, label);
+  console.log(topicList.id);
+  loadTopicInPanel(panel, topicList, 1);
 }
 
 /**
@@ -83,9 +57,9 @@ export function createForumItem(item: ForumItem){
  * @param topicLink 话题链接
  * @param page 页码
  */
-function loadTopicListInPanel(
+function loadTopicInPanel(
     panel: vscode.WebviewPanel,
-    item: ForumItem,
+    topicList: TopicList,
     page: number
   ) {
     panel.webview.html = NMBXD.renderPage("loading.html", {
@@ -93,9 +67,9 @@ function loadTopicListInPanel(
     });
     const pageString=page.toString();
     // 获取详情数据
-    NMBXD.getTopicList(item.forumId, item.label, pageString)
+    NMBXD.getTopic(topicList.id, topicList.forumName, pageString)
       .then((detail) => {
-          panel.webview.html = NMBXD.renderPage("topicList.html", {
+          panel.webview.html = NMBXD.renderPage("topic.html", {
             topicList: detail,
             contextPath: Global.getWebViewContextPath(panel.webview),
             imageUrlBase: NMBXD.getImageUrlBase(),

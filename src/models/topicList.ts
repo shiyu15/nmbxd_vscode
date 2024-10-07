@@ -1,6 +1,6 @@
 export class TopicList{
 
-    public name:string;
+    public forumName:string;
     // 帖子id:
     public id:string="";
 
@@ -28,7 +28,7 @@ export class TopicList{
     constructor(name:string, id: string = "", fid: string = "", now: string="", userHash:string="",
         content:string, replyList: TopicList[], sage:boolean, hide:boolean, replyCount:number,
         img:string, ext:string) {
-        this.name=name;
+        this.forumName=name;
         this.id = id;
         this.fid= fid;
         this.now=now;

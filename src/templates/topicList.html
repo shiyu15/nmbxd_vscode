@@ -4,7 +4,7 @@
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8">
         <title>
-            <%= it.topicList[0].name %>        
+            <%= it.topicList[0].forumName %>        
         </title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <base href="https://www.nmbxd1.com" />
@@ -15,7 +15,7 @@
     <div class="forum">
     <!-- 标题 -->
     <div class="topic-header">
-        <h1><a href="/f/<%= it.topicList[0].name %>"><%= it.topicList[0].name %></a></h1>
+        <h1><a href="/f/<%= it.topicList[0].forumName %>"><%= it.topicList[0].forumName %></a></h1>
         <!-- <img src="{{authorAvatar}}" alt="avatar" /> -->
     </div>
 
@@ -23,22 +23,27 @@
         <div class="topic">
             <!-- 作者、时间、帖子号 --> 
             <div class="topic-meta">
-                <div class="node">
+                <!-- <div class="node"> -->
                     <span class="userHash"><%= topic.userHash %></span>
                     <span class="topicId">No.<%= topic.id %></span>
-                    <span class="forumName"><%= it.topicList[0].name %></span>
+                    <span class="forumName"><%= it.topicList[0].forumName %></span>
+                    <a class="open" href="javascript:;" onclick="vsPostMessage('topicOpen', {topic:<%= JSON.stringify(topic) %>});">打开</a>
                     <span class="time"><%= topic.now %></span>
-                    <span style="margin-left: 10px">打开</span>
                     <!-- <a style="margin-left: 10px" href="/t/<%= topic.id %>">浏览器中打开</a> -->
-                </div>
+                <!-- </div> -->
             </div>
             
             <!-- 正文 -->
-            <% if (topic.content) { %>
-            <div class="topic-content" style="margin-bottom: 10px"><%~ topic.content %></div>
-            <% } else { %>
-            <div class="topic-content" style="margin-bottom: 10px"></div>
-            <% } %>
+            <div class="content">
+                <% if (topic.img) { %>
+                <div class="img-content"><img src="<%= it.imageUrlBase+ "thumb/" + topic.img + topic.ext %>" alt="image" /></div>
+                <% } %>
+                <% if (topic.content) { %>
+                <div class="word-content" style="margin-bottom: 10px"><%~ topic.content %></div>
+                <% } else { %>
+                <div class="word-content" style="margin-bottom: 10px"></div>
+                <% } %>
+            </div>
 
             <% if (topic.replyCount) { %>
                 <h2>共<%= topic.replyCount %>条回复</h2>
@@ -64,9 +69,9 @@
                         
                         <!-- 正文 -->
                         <% if (reply.content) { %>
-                        <div class="topic-content"><%~ reply.content %></div>
+                        <div class="word-content"><%~ reply.content %></div>
                         <% } else { %>
-                        <div class="topic-content"></div>
+                        <div class="word-content"></div>
                         <% } %>
                     
                     </div>
@@ -79,7 +84,7 @@
 
     <% } %>
     </div>
-    
+    <script src="<%= it.contextPath %>/src/templates/topicList.js"></script>
 
 </body>
 </html>

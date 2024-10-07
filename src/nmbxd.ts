@@ -51,8 +51,8 @@ export class NMBXD {
         return html;
     }
 
-    static async getTopicList(fid: string, name:string, page:string): Promise<TopicList[]> {
-        const response = await http.get(`https://${Global.getApiUrl()}/showf?id=${fid}`,{
+    static async getTopicList(fid: string, forumName:string, page:string): Promise<TopicList[]> {
+        const response = await http.get(`https://${Global.getApiUrl()}/showf?id=${fid}&page=${page}`,{
             headers: {
                 Cookie: `userhash=${Global.getUserHash()}`
             },
@@ -60,7 +60,7 @@ export class NMBXD {
         const topicList :TopicList[]=[];
         for(const topic of response.data){
             let newTopic=new TopicList(
-                name,
+                forumName,
                 topic.id,
                 topic.fid,
                 topic.now,
@@ -75,7 +75,7 @@ export class NMBXD {
             );
             for(const reply of topic.Replies){
                 newTopic.replies.push(new TopicList(
-                    name,
+                    forumName,
                     reply.id,
                     reply.fid,
                     reply.now,
@@ -92,6 +92,52 @@ export class NMBXD {
             topicList.push(newTopic);
         }   
         return topicList;
+    }
+
+    static getImageUrlBase(): string {
+        return `https://image.nmb.best/`;
+    }
+
+    static async getTopic(topicId: string, forumName:string, page:string): Promise<TopicList> {
+        const response = await http.get(`https://${Global.getApiUrl()}/thread?id=${topicId}&page=${page}`,{
+            headers: {
+                Cookie: `userhash=${Global.getUserHash()}`
+            },
+        });
+        const topicList :TopicList[]=[];
+        let topic=response.data;
+        let newTopic=new TopicList(
+            forumName,
+            topic.id,
+            topic.fid,
+            topic.now,
+            topic.user_hash,
+            topic.content,
+            [] as TopicList[],
+            topic.sage,
+            topic.hide,
+            topic.ReplyCount,
+            topic.img,
+            topic.ext,
+        );
+        for(const reply of topic.Replies){
+            newTopic.replies.push(new TopicList(
+                forumName,
+                reply.id,
+                topic.fid,
+                reply.now,
+                reply.user_hash,
+                reply.content,
+                [] as TopicList[],
+                false,
+                false,
+                0,
+                topic.img,
+                topic.ext,
+            ));
+            topicList.push(newTopic);
+        }   
+        return newTopic;
     }
 }
 

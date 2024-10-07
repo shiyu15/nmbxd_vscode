@@ -12,7 +12,7 @@
 			}
 		},
 		{
-			"label": "Compile LESS",
+			"label": "Compile LESS topicList",
 			"type": "shell",
 			"command": "bash",
 			"args": [
@@ -22,8 +22,18 @@
 			"problemMatcher": []
 		},
 		{
+			"label": "Compile LESS topic",
+			"type": "shell",
+			"command": "bash",
+			"args": [
+				"-c",
+				"lessc src/templates/topic.less src/templates/topic.css"
+			],
+			"problemMatcher": []
+		},
+		{
 			"label": "build all",
-			"dependsOn": [ "Compile LESS","npm: watch"], // 依赖两个任务
+			"dependsOn": [ "Compile LESS topicList","Compile LESS topic","npm: watch"], // 依赖多个任务
 			"group": {
 				"kind": "build",
 				"isDefault": true

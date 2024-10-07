@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+    <html lang="en"></html>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <base href="https://www.nmbxd1.com" />
+        <link rel="stylesheet" href="<%= it.contextPath %>/src/templates/common.css" />
+        <link rel="stylesheet" href="<%= it.contextPath %>/src/templates/topic.css" />
+    </head>
+<body>
+    <div class="forum">
+
+      <div class="topic">
+          <!-- 作者、时间、帖子号 --> 
+          <div class="topic-meta">
+              <!-- <div class="node"> -->
+                  <span class="userHash"><%= it.topicList.userHash %></span>
+                  <span class="topicId">No.<%=  it.topicList.id %></span>
+                  <span class="forumName"><%= it.topicList.forumName %></span>
+                  <span class="time"><%= it.topicList.now %></span>
+                  <a style="margin-left: 10px" href="/t/<%= it.topicList.id %>">浏览器中打开</a>
+              <!-- </div> -->
+          </div>
+          
+          <!-- 正文 -->
+          <div class="content">
+              <% if (it.topicList.img) { %>
+              <div class="img-content"><img src="<%= it.imageUrlBase+ "thumb/" + it.topicList.img + it.topicList.ext %>" alt="image" /></div>
+              <% } %>
+              <% if (it.topicList.content) { %>
+              <div class="word-content" style="margin-bottom: 10px"><%~ it.topicList.content %></div>
+              <% } else { %>
+              <div class="word-content" style="margin-bottom: 10px"></div>
+              <% } %>
+          </div>
+
+          <% if (it.topicList.replyCount) { %>
+              <h2>共<%= it.topicList.replyCount %>条回复</h2>
+          <% } else { %>
+              <h2>暂无回复</h2>
+          <% } %>
+
+
+
+          <!-- 评论 -->
+          <div class="reply">
+
+              <!-- 列表 -->
+              <% let floorNum=0; %>
+              <% for (const reply of it.topicList.replies){ %>
+                  <% floorNum++; %>
+                  <div class="reply-item">
+                      <!-- 作者、时间、帖子号 --> 
+                      <div class="topic-meta">
+                          <div class="userHash"><%= reply.userHash %></div>
+                          <div class="topicId">No.<%= reply.id %></div>
+                          <div class="floorNum"><%= floorNum %></div>
+                          <div class="time"><%= reply.now %></div>
+                      </div>
+                      
+                      <!-- 正文 -->
+                      <div class="content">
+                        <% if (reply.img) { %>
+                            <div class="img-content"><img src="<%= it.imageUrlBase+ "thumb/" + reply.img + reply.ext %>" alt="image" /></div>
+                        <% } %>
+                        <% if (reply.content) { %>
+                            <div class="word-content"><%~ reply.content %></div>
+                        <% } else { %>
+                            <div class="word-content"></div>
+                        <% } %>
+                      </div>
+                  </div>
+                  <hr />
+              <% } %>
+          </div>
+      </div>
+
+    </div>
+    <script src="<%= it.contextPath %>/src/templates/topic.js"></script>
+
+</body>
+</html>
