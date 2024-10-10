@@ -1,3 +1,12 @@
+const vscode = acquireVsCodeApi();
+
+const vsPostMessage = (command, messages) => {
+  vscode.postMessage({
+    command: command,
+    ...(messages || {})
+  });
+};
+
 
 //点击图片后切换大图和小图显示
 const images = document.querySelectorAll('img');

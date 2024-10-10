@@ -28,6 +28,9 @@
                     <span class="topicId">No.<%= topic.id %></span>
                     <span class="forumName"><%= it.topicList[0].forumName %></span>
                     <a class="open" href="javascript:;" onclick="vsPostMessage('topicOpen', {topic:<%= JSON.stringify(topic) %>});">打开</a>
+                    <span class="collect">收藏</span>
+                    <span class="share">分享</span>
+                    <span class="cite"> 引用</span>
                     <span class="time"><%= topic.now %></span>
                     <!-- <a style="margin-left: 10px" href="/t/<%= topic.id %>">浏览器中打开</a> -->
                 <!-- </div> -->
@@ -63,6 +66,9 @@
                         <div class="topic-meta">
                             <div class="userHash"><%= reply.userHash %></div>
                             <div class="topicId">No.<%= reply.id %></div>
+                            <% if(reply.userHash === it.topicList.userHash){ %>
+                                <div class="replyAuthor">楼主</div>
+                            <% } %>
                             <div class="time"><%= reply.now %></div>
                             <!-- <a class="node" href="/t/{{ reply.id }}">浏览器中打开</a> -->
                         </div>

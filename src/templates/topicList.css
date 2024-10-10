@@ -85,6 +85,9 @@ hr {
 .topic-meta .hidden {
   display: none;
 }
+.topic-meta .replyAuthor {
+  margin-left: 10px;
+}
 .content {
   display: flex;
   flex-direction: row;

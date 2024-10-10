@@ -10,7 +10,6 @@
     </head>
 <body>
     <div class="forum">
-
       <div class="topic">
           <!-- 作者、时间、帖子号 --> 
           <div class="topic-meta">
@@ -20,6 +19,24 @@
                   <span class="forumName"><%= it.topicList.forumName %></span>
                   <span class="time"><%= it.topicList.now %></span>
                   <a style="margin-left: 10px" href="/t/<%= it.topicList.id %>">浏览器中打开</a>
+                  <span class="collect">收藏</span>
+                  <span class="share">分享</span>
+                  <span class="cite"> 引用</span>
+                  <% if(it.topicState.isOnlyAuthor){ %>
+                  <a class="onlyAuthor"
+                    href="javascript:;" 
+                    onclick="vsPostMessage('cancelOnlyAuthor', {});">
+                    取消只看楼主
+                  </a>
+                  <% }else{ %>
+                  <a class="onlyAuthor"
+                    href="javascript:;" 
+                    onclick="vsPostMessage('onlyAuthor', {});">
+                    只看楼主
+                  </a>
+                  <% } %>
+
+
               <!-- </div> -->
           </div>
           
@@ -56,7 +73,11 @@
                           <div class="userHash"><%= reply.userHash %></div>
                           <div class="topicId">No.<%= reply.id %></div>
                           <div class="floorNum"><%= floorNum %></div>
+                          <% if(reply.userHash === it.topicList.userHash){ %>
+                            <div class="replyAuthor">楼主</div>
+                          <% } %>
                           <div class="time"><%= reply.now %></div>
+                          <span class="cite"> 引用</span>
                       </div>
                       
                       <!-- 正文 -->

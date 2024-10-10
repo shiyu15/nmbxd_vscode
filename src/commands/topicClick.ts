@@ -5,7 +5,7 @@ import { Forum, ForumData } from '../models/forum';
 import { TopicList } from '../models/topicList';
 import * as vscode from "vscode";
 import {ForumItem} from "../provider/dataProvider";
-
+import {TopicState} from "../models/topicState";
 const panels: { [key: string]: vscode.WebviewPanel } = {};
 
 
@@ -45,10 +45,37 @@ export function createTopicItem(topicList: TopicList){
     panel.reveal();
     return;
   }
+  let topicState=new TopicState(false, 1, false);
   let label=topicList.content.length>10?topicList.content.substring(0,10):topicList.content;
   panel = _createPanel(topicList.id, label);
+  panel.webview.onDidReceiveMessage((message) => {
+    switch (message.command) {
+      // case "setTitle":
+      //   panel.title = _getTitle(message.title);
+      //   break;
+      // case "refresh":
+      //   loadTopicInPanel(panel, item.link, message.page);
+      //   break;
+      // case "pageTurning":
+      //   loadTopicInPanel(panel, item.link, message.page);
+      //   break;
+      // case "collect":
+      //   collectPost(panel, topic);
+      //   break;
+      case "onlyAuthor":
+        topicState.isOnlyAuthor=true;
+        loadTopicInPanel(panel, topicList, topicState);
+        break;
+      case "cancelOnlyAuthor":
+        topicState.isOnlyAuthor=false;
+        loadTopicInPanel(panel, topicList, topicState);
+        break;
+      default:
+        break;
+    }
+  });
   console.log(topicList.id);
-  loadTopicInPanel(panel, topicList, 1);
+  loadTopicInPanel(panel, topicList, topicState);
 }
 
 /**
@@ -60,19 +87,20 @@ export function createTopicItem(topicList: TopicList){
 function loadTopicInPanel(
     panel: vscode.WebviewPanel,
     topicList: TopicList,
-    page: number
+    topicState: TopicState
   ) {
     panel.webview.html = NMBXD.renderPage("loading.html", {
       contextPath: Global.getWebViewContextPath(panel.webview),
     });
-    const pageString=page.toString();
+    const pageString=topicState.page.toString();
     // 获取详情数据
-    NMBXD.getTopic(topicList.id, topicList.forumName, pageString)
+    NMBXD.getTopic(topicList.id, topicList.forumName, pageString, topicState.isOnlyAuthor)
       .then((detail) => {
           panel.webview.html = NMBXD.renderPage("topic.html", {
             topicList: detail,
             contextPath: Global.getWebViewContextPath(panel.webview),
             imageUrlBase: NMBXD.getImageUrlBase(),
+            topicState: topicState
           });
         }
         // } else {
