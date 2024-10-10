@@ -40,7 +40,7 @@ export class NMBXD {
         dataTimeLine.name="时间线";
         dataTimeLine.forums=responseTimeLine.data;
 
-        let forumData: any[] = [...responseForum.data, dataTimeLine];
+        let forumData: any[] = [dataTimeLine, ...responseForum.data];
         return this.parseForumData(forumData);
     }
 

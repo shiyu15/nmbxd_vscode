@@ -45,7 +45,7 @@ export function createTopicItem(topicList: TopicList){
     panel.reveal();
     return;
   }
-  let topicState=new TopicState(false, 1, false);
+  let topicState=new TopicState(false, 1, false, 1);
   let label=topicList.content.length>10?topicList.content.substring(0,10):topicList.content;
   panel = _createPanel(topicList.id, label);
   panel.webview.onDidReceiveMessage((message) => {
@@ -62,12 +62,18 @@ export function createTopicItem(topicList: TopicList){
       // case "collect":
       //   collectPost(panel, topic);
       //   break;
+      case "pageTurn":
+        topicState.page=message.page;
+        loadTopicInPanel(panel, topicList, topicState);
+        break;
       case "onlyAuthor":
         topicState.isOnlyAuthor=true;
+        topicState.page=1;
         loadTopicInPanel(panel, topicList, topicState);
         break;
       case "cancelOnlyAuthor":
         topicState.isOnlyAuthor=false;
+        topicState.page=1;
         loadTopicInPanel(panel, topicList, topicState);
         break;
       default:
@@ -96,6 +102,7 @@ function loadTopicInPanel(
     // 获取详情数据
     NMBXD.getTopic(topicList.id, topicList.forumName, pageString, topicState.isOnlyAuthor)
       .then((detail) => {
+          topicState.allPage=Math.ceil(detail.replyCount/20);
           panel.webview.html = NMBXD.renderPage("topic.html", {
             topicList: detail,
             contextPath: Global.getWebViewContextPath(panel.webview),

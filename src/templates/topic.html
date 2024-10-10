@@ -96,6 +96,25 @@
               <% } %>
           </div>
       </div>
+      <div class="pageTurn">
+        <% if(it.topicState.page>1){ %>
+          <a href="javascript:;" onclick="vsPostMessage('pageTurn', {page:1});">首页</a>
+          <a href="javascript:;" onclick="vsPostMessage('pageTurn', {page:<%= it.topicState.page-1 %>});">上一页</a>
+        <% } %>
+        <% for(let i=it.topicState.page-2;i<=it.topicState.page+2;i++){ %>
+          <% if(i>=1 && i<=it.topicState.allPage && i!=it.topicState.page){ %>
+            <a href="javascript:;" onclick="vsPostMessage('pageTurn', {page:<%= i %>});"><%= i %></a>
+          <% }else if(i==it.topicState.page){ %>
+            <span><%= i %></span>
+          <% } %>
+        <% } %>
+        <% if(it.topicState.page<it.topicState.allPage){ %>
+            <a href="javascript:;" onclick="vsPostMessage('pageTurn', {page:<%= it.topicState.page+1 %>});">下一页</a>
+            <a href="javascript:;" onclick="vsPostMessage('pageTurn', {page:<%= it.topicState.allPage %>});">尾页</a>
+        <% } %>
+        <a href="javascript:;">跳转到</a>
+        <span>共<%= it.topicState.allPage %>页</span>
+      </div>
 
     </div>
     <script src="<%= it.contextPath %>/src/templates/topic.js"></script>
