@@ -1,5 +1,7 @@
 import { ExtensionContext, Webview, Uri } from "vscode";
+
 export default class Global {
+  static INPUT_CANCEL = -1;
   static context: ExtensionContext | undefined;
   static getBaseUrl(): string {
     return "www.nmbxd1.com";

@@ -38,7 +38,7 @@ function _createPanel(id: string, label: string): vscode.WebviewPanel {
  * 点击子节点打开详情页面
  * @param item 话题的子节点
  */
-export function createTopicItem(topicList: TopicList){
+export async function createTopicItem(topicList: TopicList){
   // 如果panel已经存在，则直接激活
   let panel = panels[topicList.id];
   if (panel) {
@@ -48,7 +48,7 @@ export function createTopicItem(topicList: TopicList){
   let topicState=new TopicState(false, 1, false, 1);
   let label=topicList.content.length>10?topicList.content.substring(0,10):topicList.content;
   panel = _createPanel(topicList.id, label);
-  panel.webview.onDidReceiveMessage((message) => {
+  panel.webview.onDidReceiveMessage(async (message) => {
     switch (message.command) {
       // case "setTitle":
       //   panel.title = _getTitle(message.title);
@@ -62,6 +62,17 @@ export function createTopicItem(topicList: TopicList){
       // case "collect":
       //   collectPost(panel, topic);
       //   break;
+      case "inputChangePage":
+        let page:number=await changePage();
+        if(page>0&&page<=topicState.allPage){
+          topicState.page=page;
+          loadTopicInPanel(panel, topicList, topicState);
+        }else if(page===Global.INPUT_CANCEL){
+          break;
+        }else {
+          vscode.window.showErrorMessage("页码范围不正确");
+        }
+        break;
       case "pageTurn":
         topicState.page=message.page;
         loadTopicInPanel(panel, topicList, topicState);
@@ -85,6 +96,26 @@ export function createTopicItem(topicList: TopicList){
 }
 
 /**
+ * 用vscode api输入跳转页码
+ * @returns 跳转的页码
+ */
+async function changePage(): Promise<number> {
+  let page:string | undefined = await vscode.window.showInputBox({
+      placeHolder: '跳转页码',
+      prompt: '请输入要跳转的页码',
+      value: '1'
+    });
+
+  if (page === undefined) {
+    vscode.window.showInformationMessage('操作已取消');
+    return Global.INPUT_CANCEL; // 返回一个特殊值以指示取消
+  }
+  return parseInt(page || '1');
+}
+
+
+
+/**
  * 在Panel中加载话题列表
  * @param panel panel
  * @param topicLink 话题链接
@@ -102,7 +133,7 @@ function loadTopicInPanel(
     // 获取详情数据
     NMBXD.getTopic(topicList.id, topicList.forumName, pageString, topicState.isOnlyAuthor)
       .then((detail) => {
-          topicState.allPage=Math.ceil(detail.replyCount/20);
+          topicState.allPage=Math.ceil((detail.replyCount)/19);
           panel.webview.html = NMBXD.renderPage("topic.html", {
             topicList: detail,
             contextPath: Global.getWebViewContextPath(panel.webview),

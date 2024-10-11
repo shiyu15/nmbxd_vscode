@@ -64,20 +64,25 @@
           <div class="reply">
 
               <!-- 列表 -->
-              <% let floorNum=0; %>
+              <% let floorNum=it.topicState.page*19-19; %>
               <% for (const reply of it.topicList.replies){ %>
-                  <% floorNum++; %>
+                  
                   <div class="reply-item">
                       <!-- 作者、时间、帖子号 --> 
                       <div class="topic-meta">
                           <div class="userHash"><%= reply.userHash %></div>
                           <div class="topicId">No.<%= reply.id %></div>
-                          <div class="floorNum"><%= floorNum %></div>
+                          <% if(reply.id!=9999999){ %>
+                            <% floorNum++; %>
+                            <div class="floorNum"><%= floorNum %></div>
+                          <% } %>
                           <% if(reply.userHash === it.topicList.userHash){ %>
-                            <div class="replyAuthor">楼主</div>
+                            <div class="replyAuthor">Po</div>
+                          <% } %>
+                          <% if(reply.id!=9999999){ %>
+                            <span class="cite"> 引用</span>
                           <% } %>
                           <div class="time"><%= reply.now %></div>
-                          <span class="cite"> 引用</span>
                       </div>
                       
                       <!-- 正文 -->
@@ -112,7 +117,7 @@
             <a href="javascript:;" onclick="vsPostMessage('pageTurn', {page:<%= it.topicState.page+1 %>});">下一页</a>
             <a href="javascript:;" onclick="vsPostMessage('pageTurn', {page:<%= it.topicState.allPage %>});">尾页</a>
         <% } %>
-        <a href="javascript:;">跳转到</a>
+        <a href="javascript:;" onclick="vsPostMessage('inputChangePage', {});">跳转到</a>
         <span>共<%= it.topicState.allPage %>页</span>
       </div>
 
