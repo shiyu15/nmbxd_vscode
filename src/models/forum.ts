@@ -1,3 +1,4 @@
+
 export class Forum{
 
     // 板块id
@@ -6,10 +7,14 @@ export class Forum{
     public name:string="";
     // 子板块列表
     public child:Forum[]=[];
-    constructor(fid: string = "", name: string = "", child: Forum[] = []) {
+    // 某个分论坛中的所有帖子数量
+    public threadNumber:number=0;
+
+    constructor(fid: string = "", name: string = "", child: Forum[] = [], threadNumber:number=0) {
         this.fid = fid;
         this.name = name;
         this.child = child;
+        this.threadNumber=threadNumber;
     }
 
 }
@@ -18,4 +23,13 @@ export interface ForumData {
     fid: string;
     name: string;
     forums?: ForumData[];
+}
+
+export class ForumState{
+    public allPage:number;
+    public page:number;
+    constructor(allPage:number, page:number){
+        this.allPage=allPage;
+        this.page=page;
+    }
 }

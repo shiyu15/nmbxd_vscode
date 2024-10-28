@@ -80,7 +80,7 @@
                             <div class="replyAuthor">Po</div>
                           <% } %>
                           <% if(reply.id!=9999999){ %>
-                            <span class="cite"> 引用</span>
+                            <a class="cite" href="javascript:;" onclick="vsPostMessage('reply', {input:'>>No.<%=reply.id%>',});">引用</a>
                           <% } %>
                           <div class="time"><%= reply.now %></div>
                       </div>
@@ -106,7 +106,7 @@
           <a href="javascript:;" onclick="vsPostMessage('pageTurn', {page:1});">首页</a>
           <a href="javascript:;" onclick="vsPostMessage('pageTurn', {page:<%= it.topicState.page-1 %>});">上一页</a>
         <% } %>
-        <% for(let i=it.topicState.page-2;i<=it.topicState.page+2;i++){ %>
+        <% for(let i=it.topicState.page-3;i<=it.topicState.page+3;i++){ %>
           <% if(i>=1 && i<=it.topicState.allPage && i!=it.topicState.page){ %>
             <a href="javascript:;" onclick="vsPostMessage('pageTurn', {page:<%= i %>});"><%= i %></a>
           <% }else if(i==it.topicState.page){ %>
@@ -119,6 +119,9 @@
         <% } %>
         <a href="javascript:;" onclick="vsPostMessage('inputChangePage', {});">跳转到</a>
         <span>共<%= it.topicState.allPage %>页</span>
+      </div>
+      <div class="reply-input">
+          <a href="javascript:;" onclick="vsPostMessage('reply', {input:''});">回复</a>
       </div>
 
     </div>

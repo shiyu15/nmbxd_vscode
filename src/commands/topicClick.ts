@@ -5,7 +5,7 @@ import { Forum, ForumData } from '../models/forum';
 import { TopicList } from '../models/topicList';
 import * as vscode from "vscode";
 import {ForumItem} from "../provider/dataProvider";
-import {TopicState} from "../models/topicState";
+import {TopicState} from "../models/topicList";
 const panels: { [key: string]: vscode.WebviewPanel } = {};
 
 
@@ -85,6 +85,11 @@ export async function createTopicItem(topicList: TopicList){
       case "cancelOnlyAuthor":
         topicState.isOnlyAuthor=false;
         topicState.page=1;
+        loadTopicInPanel(panel, topicList, topicState);
+        break;
+      case "reply":
+        const replyInput:string=message.input;
+        NMBXD.reply(replyInput, topicList.id);
         loadTopicInPanel(panel, topicList, topicState);
         break;
       default:

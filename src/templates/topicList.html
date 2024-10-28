@@ -18,7 +18,7 @@
         <h1><a href="/f/<%= it.topicList[0].forumName %>"><%= it.topicList[0].forumName %></a></h1>
         <!-- <img src="{{authorAvatar}}" alt="avatar" /> -->
     </div>
-
+    <a class="cite" href="javascript:;" onclick="vsPostMessage('post', {input:'',});">发串</a>
     <% for (const topic of it.topicList){ %>
         <div class="topic">
             <!-- 作者、时间、帖子号 --> 
@@ -90,6 +90,27 @@
 
     <% } %>
     </div>
+
+    <div class="pageTurn">
+        <% if(it.forumState.page>1){ %>
+          <a href="javascript:;" onclick="vsPostMessage('pageTurn', {page:1});">首页</a>
+          <a href="javascript:;" onclick="vsPostMessage('pageTurn', {page:<%= it.forumState.page-1 %>});">上一页</a>
+        <% } %>
+        <% for(let i=it.forumState.page-3;i<=it.forumState.page+3;i++){ %>
+          <% if(i>=1 && i<=it.forumState.allPage && i!=it.forumState.page){ %>
+            <a href="javascript:;" onclick="vsPostMessage('pageTurn', {page:<%= i %>});"><%= i %></a>
+          <% }else if(i==it.forumState.page){ %>
+            <span><%= i %></span>
+          <% } %>
+        <% } %>
+        <% if(it.forumState.page<it.forumState.allPage){ %>
+            <a href="javascript:;" onclick="vsPostMessage('pageTurn', {page:<%= it.forumState.page+1 %>});">下一页</a>
+            <a href="javascript:;" onclick="vsPostMessage('pageTurn', {page:<%= it.forumState.allPage %>});">尾页</a>
+        <% } %>
+        <a href="javascript:;" onclick="vsPostMessage('inputChangePage', {});">跳转到</a>
+        <span>共<%= it.forumState.allPage %>页</span>
+    </div>
+
     <script src="<%= it.contextPath %>/src/templates/topicList.js"></script>
 
 </body>

@@ -16,6 +16,22 @@
 				"${workspaceFolder}/out/**/*.js"
 			],
 			"preLaunchTask": "build all"
+		},
+		{
+			"type": "node",
+			"request": "launch",
+			"name": "Debug TypeScript File",
+			"preLaunchTask": "npm: watch",
+			"program": "${workspaceFolder}/src/test.ts",
+			"outFiles": [
+				"${workspaceFolder}/out/**/*.js"
+			],
+			"sourceMaps": true,
+			"runtimeArgs": ["--nolazy", "-r", "ts-node/register"],
+			"env": {
+				"TS_NODE_PROJECT": "${workspaceFolder}/tsconfig.json"
+			},
+			"cwd": "${workspaceFolder}",
 		}
 	]
 }

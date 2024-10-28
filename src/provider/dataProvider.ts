@@ -38,6 +38,7 @@ export class DataProvider implements TreeDataProvider<ForumItem> {
                 //处理所属版块
                 forum.children = forum.children.concat(category.child.map(elementContent => {
                     const child=new ForumItem(elementContent.name, elementContent.fid, TreeItemCollapsibleState.None,true);
+                    child.threadNumber=elementContent.threadNumber;
                     child.command={
                         command:"nmbxd.forumItemClick",
                         title:"点击",
@@ -71,4 +72,6 @@ export class ForumItem extends TreeItem {
         this.tooltip = this.label;
     }
     public children: ForumItem[]=[];
+    // 某个分论坛中的所有帖子数量
+    public threadNumber:number=0;
 }

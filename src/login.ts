@@ -9,8 +9,8 @@ import {NMBXD} from './nmbxd';
 export default async function login(): Promise<LoginResult> {
     let userHash = await vscode.window.showInputBox({
       placeHolder: 'x岛 UserHash',
-      prompt: '在此处粘贴从浏览器中复制的 UserHash（即请求头中的 Cookie 中的 UserHash 项）\
-               如%B8H%1E5B%F6%8C%F1%3B%08%98%C7Z%930X%H0%25a%0E%3EU%E53',
+      prompt: '在此处粘贴从x岛用户系统中扫描二维码得到的coocie\
+               如%B8H%1E5B%F6%F1%3B%08%98%C7Z%930X%H0%25a%0E',
       value: Global.getUserHash()
     });
 
@@ -21,7 +21,7 @@ export default async function login(): Promise<LoginResult> {
     }
     userHash = (userHash || '').trim();
     // 容错处理：如果用户把前面的键也复制进去了，则手动去掉前面的cookie:
-    userHash = userHash.replace(/^userhash: /i, '');
+    userHash = userHash.replace(/^"|"$/g, '');
   
     // 清除cookie
     if (!userHash) {

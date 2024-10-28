@@ -1,7 +1,7 @@
 import http from '../http';
 import Global from "../global";
 import { NMBXD } from "../nmbxd";
-import { Forum, ForumData } from '../models/forum';
+import { Forum, ForumData, ForumState } from '../models/forum';
 import { TopicList } from '../models/topicList';
 import * as vscode from "vscode";
 import {ForumItem} from "../provider/dataProvider";
@@ -39,43 +39,62 @@ function _createPanel(id: string, label: string): vscode.WebviewPanel {
  * 点击子节点打开详情页面
  * @param item 话题的子节点
  */
-export function createForumItem(item: ForumItem){
+export async function createForumItem(item: ForumItem){
   // 如果panel已经存在，则直接激活
   let panel = panels[item.forumId];
   if (panel) {
     panel.reveal();
     return;
   }
-
+  let forumState=new ForumState(Math.ceil(item.threadNumber/20), 1);
   panel = _createPanel(item.forumId, item.label as string);
-  panel.webview.onDidReceiveMessage((message) => {
+  panel.webview.onDidReceiveMessage(async (message) => {
     switch (message.command) {
-      // case "setTitle":
-      //   panel.title = _getTitle(message.title);
-      //   break;
-      // case "refresh":
-      //   loadTopicInPanel(panel, item.link, message.page);
-      //   break;
-      // case "pageTurning":
-      //   loadTopicInPanel(panel, item.link, message.page);
-      //   break;
-      // case "collect":
-      //   collectPost(panel, topic);
-      //   break;
+
+      case "inputChangePage":
+        let page:number=await changePage(); 
+        if(page>0&&page<=forumState.allPage&&Number.isInteger(page)){
+          forumState.page=page;
+          loadTopicListInPanel(panel, item, forumState);
+        }else if(page===Global.INPUT_CANCEL){
+          break;
+        }else {
+          vscode.window.showErrorMessage("页码范围不正确");
+        }
+        break;
+      case "pageTurn":
+        forumState.page=message.page;
+        loadTopicListInPanel(panel, item, forumState);
+        break;
       case "topicOpen":
         createTopicItem(message.topic);
+        break;
+      case "post":
+        NMBXD.postThread(item.forumId);
         break;
       default:
         break;
     }
   });
 
-
-
-
   console.log(item.forumId);
-  loadTopicListInPanel(panel, item, 1);
+  loadTopicListInPanel(panel, item, forumState);
 }
+
+async function changePage(): Promise<number> {
+  let page:string | undefined = await vscode.window.showInputBox({
+      placeHolder: '跳转页码',
+      prompt: '请输入要跳转的页码',
+      value: '1'
+    });
+
+  if (page === undefined) {
+    vscode.window.showInformationMessage('操作已取消');
+    return Global.INPUT_CANCEL; // 返回一个特殊值以指示取消
+  }
+  return parseInt(page || '1');
+}
+
 
 /**
  * 在Panel中加载话题列表
@@ -86,12 +105,12 @@ export function createForumItem(item: ForumItem){
 function loadTopicListInPanel(
     panel: vscode.WebviewPanel,
     item: ForumItem,
-    page: number
+    forumState: ForumState
   ) {
     panel.webview.html = NMBXD.renderPage("loading.html", {
       contextPath: Global.getWebViewContextPath(panel.webview),
     });
-    const pageString=page.toString();
+    const pageString=forumState.page.toString();
     // 获取详情数据
     NMBXD.getTopicList(item.forumId, item.label, pageString)
       .then((detail) => {
@@ -99,6 +118,7 @@ function loadTopicListInPanel(
             topicList: detail,
             contextPath: Global.getWebViewContextPath(panel.webview),
             imageUrlBase: NMBXD.getImageUrlBase(),
+            forumState:forumState,
           });
         }
         // } else {
