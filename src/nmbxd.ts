@@ -51,7 +51,8 @@ export class NMBXD {
             item.id,
             item.name,
             item.forums ? this.parseForumData(item.forums) : [],
-            item.thread_count
+            item.thread_count,
+            'max_page' in item ? 1 : 0
         ));
     }
 
@@ -63,12 +64,54 @@ export class NMBXD {
         return html;
     }
 
-    static async getTopicList(fid: string, forumName:string, page:string): Promise<TopicList[]> {
-        const response = await http.get(`https://${Global.getApiUrl()}/showf?id=${fid}&page=${page}`,{
+
+    /**
+     * @description: 获取引用帖子
+     * @param {string} id
+     * @return {*}
+     */
+    static async getReference(id:string):Promise<TopicList>{
+        const response=await http.get(`https://${Global.getApiUrl()}/ref?id=${id}`,{
             headers: {
                 Cookie: `userhash=${Global.getUserHash()}`,
             },
         });
+        let newTopic=new TopicList(
+            "",
+            response.data.id,
+            response.data.fid,
+            response.data.now,
+            response.data.user_hash,
+            response.data.content,
+            [] as TopicList[],
+            response.data.sage,
+            response.data.hide,
+            response.data.ReplyCount,
+            response.data.img,
+            response.data.ext,
+        );
+        return newTopic;
+    }
+    
+    
+    // 获取版面的帖子列表，注意普通版面和时间线版面调用的api不一样
+    static async getTopicList(fid: string, forumName:string, page:string, type:number): Promise<TopicList[]> {
+        
+        let response;
+        // 0为普通板块，1为时间线板块
+        if(type===0){
+            response=await http.get(`https://${Global.getApiUrl()}/showf?id=${fid}&page=${page}`,{
+                headers: {
+                    Cookie: `userhash=${Global.getUserHash()}`,
+                },
+            });
+        }else{
+            response=await http.get(`https://${Global.getApiUrl()}/timeline?id=${fid}&page=${page}`,{
+                headers: {
+                    Cookie: `userhash=${Global.getUserHash()}`,
+                },
+            });
+        }
         const topicList :TopicList[]=[];
         if ('success' in response.data && response.data.success === false){
             console.error(response.data.error);
@@ -177,18 +220,40 @@ export class NMBXD {
      * @return {*}
      */
     static async reply(replyPreContent: string, resto:string):Promise<boolean>{
-        let reply = await vscode.window.showInputBox({
-            placeHolder: `请输入回复内容,已添加引用${replyPreContent}引用串请在前面加上>>No.串号`,
-            prompt: '',
-            value: ''
-          });
-        reply=replyPreContent+'\n'+reply;
+        let reply;
+        if(replyPreContent){
+            reply = await vscode.window.showInputBox({
+                placeHolder: `请输入回复内容,已添加引用${replyPreContent}`,
+                prompt: '',
+                value: ''
+              });
+        }else{
+            reply = await vscode.window.showInputBox({
+                placeHolder: `请输入回复内容,引用串请加上>>No.串号`,
+                prompt: '',
+                value: ''
+              });
+        }
+        // 添加对 ESC 的处理
+        if (reply === undefined) {
+            vscode.window.showInformationMessage('已取消回帖');
+            return false;
+        }
+        if(replyPreContent){
+            reply=replyPreContent+'\n'+reply;
+        }
         const options = ['插入图片（带水印）', '插入图片（不带水印）', '不插入图片'];
         const isInputImage = await vscode.window.showQuickPick(options, {
             placeHolder: '是否插入图片？',
             canPickMany: false,
             ignoreFocusOut: true
         });
+
+        // 添加对图片选择 ESC 的处理
+        if (isInputImage === undefined) {
+            vscode.window.showInformationMessage('已取消回帖');
+            return false;
+        }
         let fileUri;
         if (isInputImage === '插入图片（带水印）' ||isInputImage === '插入图片（不带水印）') {
             const options = {
@@ -206,10 +271,11 @@ export class NMBXD {
         } else {
             console.log('未选择文件');
         }
-        if(reply===""&&(fileUri===undefined||fileUri.length===0)){
+        if((reply===""||reply==="\n"||reply===undefined)&&(fileUri===undefined||fileUri.length===0)){
             vscode.window.showErrorMessage('回复内容不能为空');
             return false;
         }
+        
         const url=`https://www.nmbxd.com/home/forum/doReplyThread.html`;
         const headers= {
             Cookie: `userhash=${Global.getUserHash()}`,
@@ -220,7 +286,7 @@ export class NMBXD {
         payload.append('content', reply);
         payload.append('resto', resto);
         if(fileUri&&fileUri.length>0){
-            payload.append('file', fs.createReadStream(fileUri[0].fsPath));
+            payload.append('image', fs.createReadStream(fileUri[0].fsPath));
         }
         if(isInputImage==="插入图片（带水印）"){
             payload.append('water', '1');
@@ -240,10 +306,14 @@ export class NMBXD {
         if (response.data.includes(successIndicator)) {
             vscode.window.showInformationMessage("回复成功");
             return true; // 如果包含，返回 true
-        } else if (response.data.includes("未应用饼干，请在用户中心应用饼干")){
-            vscode.window.showErrorMessage('未应用饼干，请在用户中心应用饼干');
-            return false; 
-        }  
+        } else{
+            const errorMessage = Global.extractErrorMessage(response.data);
+            if (errorMessage) {
+                vscode.window.showErrorMessage(errorMessage);
+            } else {
+                vscode.window.showErrorMessage('回复失败');
+            }
+        }
         return  false;
     }
 
@@ -312,7 +382,10 @@ export class NMBXD {
         } else if (response.data.includes("未应用饼干，请在用户中心应用饼干")){
             vscode.window.showErrorMessage('未应用饼干，请在用户中心应用饼干');
             return false; 
-        }  
+        }  else if (response.data.includes("没有上传文件的时候")){
+            vscode.window.showErrorMessage('没有上传文件的时候，必须填写内容');
+            return false;
+        }
         return  false;
     }
 

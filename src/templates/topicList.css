@@ -34,6 +34,14 @@ hr {
   margin: 5px auto;
   flex-direction: column;
 }
+.refresh {
+  margin-left: 10px;
+  color: #4daafc;
+}
+.post {
+  margin-left: 10px;
+  color: #4daafc;
+}
 .topic {
   border-radius: 6px;
   padding: 5px 10px 5px;
@@ -72,6 +80,14 @@ hr {
   margin-left: auto;
 }
 .topic-meta .open {
+  margin-left: 10px;
+  color: #4daafc;
+}
+.topic-meta .collect {
+  margin-left: 10px;
+  color: #4daafc;
+}
+.topic-meta .cite {
   margin-left: 10px;
   color: #4daafc;
 }

@@ -14,20 +14,20 @@
 		{
 			"label": "Compile LESS topicList",
 			"type": "shell",
-			"command": "bash",
+			"command": "${workspaceFolder}/node_modules/.bin/lessc",
 			"args": [
-				"-c",
-				"lessc src/templates/topicList.less src/templates/topicList.css"
+				"src/templates/topicList.less",
+				"src/templates/topicList.css"
 			],
 			"problemMatcher": []
 		},
 		{
 			"label": "Compile LESS topic",
 			"type": "shell",
-			"command": "bash",
+			"command": "${workspaceFolder}/node_modules/.bin/lessc",
 			"args": [
-				"-c",
-				"lessc src/templates/topic.less src/templates/topic.css"
+				"src/templates/topic.less",
+				"src/templates/topic.css"
 			],
 			"problemMatcher": []
 		},

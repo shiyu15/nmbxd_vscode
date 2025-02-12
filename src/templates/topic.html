@@ -9,48 +9,55 @@
         <link rel="stylesheet" href="<%= it.contextPath %>/src/templates/topic.css" />
     </head>
 <body>
+    <div id="tooltip" class="tooltip"></div>
     <div class="forum">
       <div class="topic">
           <!-- 作者、时间、帖子号 --> 
           <div class="topic-meta">
-              <!-- <div class="node"> -->
-                  <span class="userHash"><%= it.topicList.userHash %></span>
-                  <span class="topicId">No.<%=  it.topicList.id %></span>
-                  <span class="forumName"><%= it.topicList.forumName %></span>
-                  <span class="time"><%= it.topicList.now %></span>
-                  <a style="margin-left: 10px" href="/t/<%= it.topicList.id %>">浏览器中打开</a>
-                  <span class="collect">收藏</span>
-                  <span class="share">分享</span>
-                  <span class="cite"> 引用</span>
-                  <% if(it.topicState.isOnlyAuthor){ %>
-                  <a class="onlyAuthor"
-                    href="javascript:;" 
-                    onclick="vsPostMessage('cancelOnlyAuthor', {});">
-                    取消只看楼主
-                  </a>
-                  <% }else{ %>
-                  <a class="onlyAuthor"
-                    href="javascript:;" 
-                    onclick="vsPostMessage('onlyAuthor', {});">
-                    只看楼主
-                  </a>
-                  <% } %>
-
-
-              <!-- </div> -->
+              <span class="userHash"><%= it.topicList.userHash %></span>
+              <span class="topicId">No.<%=  it.topicList.id %></span>
+              <span class="forumName"><%= it.topicList.forumName %></span>
+              <span class="time"><%= it.topicList.now %></span>
           </div>
           
           <!-- 正文 -->
           <div class="content">
+
               <% if (it.topicList.img) { %>
-              <div class="img-content"><img src="<%= it.imageUrlBase+ "thumb/" + it.topicList.img + it.topicList.ext %>" alt="image" /></div>
+                  <div class="img-content"><img src="<%= it.imageUrlBase+ "thumb/" + it.topicList.img + it.topicList.ext %>" alt="image" /></div>
+              <% } %>
+              <% if (it.topicList.cite) { %>
+                <div class="cite-content"><%~ it.topicList.cite %></div>
               <% } %>
               <% if (it.topicList.content) { %>
-              <div class="word-content" style="margin-bottom: 10px"><%~ it.topicList.content %></div>
+                  <div class="word-content" style="margin-bottom: 10px"><%~ it.topicList.content %></div>
               <% } else { %>
-              <div class="word-content" style="margin-bottom: 10px"></div>
+                  <div class="word-content" style="margin-bottom: 10px"></div>
               <% } %>
           </div>
+
+          <div class="topic-meta">
+            <a style="margin-left: 10px" href="/t/<%= it.topicList.id %>">浏览器中打开</a>
+            <a class="collect">收藏</a>
+            <a class="cite" href="javascript:;" onclick="vsPostMessage('reply', {input:'>>No.<%=it.topicList.id%>',});">引用</a>
+            <a class="refresh" href="javascript:;" onclick="vsPostMessage('refresh', {});">刷新</a>
+            <a class="reply-input" href="javascript:;" onclick="vsPostMessage('reply', {input:''});">回复</a>
+            <% if(it.topicState.isOnlyAuthor){ %>
+            <a class="onlyAuthor"
+              href="javascript:;" 
+              onclick="vsPostMessage('cancelOnlyAuthor', {});">
+              取消只看楼主
+            </a>
+            <% }else{ %>
+            <a class="onlyAuthor"
+              href="javascript:;" 
+              onclick="vsPostMessage('onlyAuthor', {});">
+              只看楼主
+            </a>
+            <% } %>
+        </div>
+
+
 
           <% if (it.topicList.replyCount) { %>
               <h2>共<%= it.topicList.replyCount %>条回复</h2>
@@ -87,8 +94,12 @@
                       
                       <!-- 正文 -->
                       <div class="content">
+
                         <% if (reply.img) { %>
                             <div class="img-content"><img src="<%= it.imageUrlBase+ "thumb/" + reply.img + reply.ext %>" alt="image" /></div>
+                        <% } %>
+                        <% if (reply.cite) { %>
+                          <div class="cite-content"><%~ reply.cite %></div>
                         <% } %>
                         <% if (reply.content) { %>
                             <div class="word-content"><%~ reply.content %></div>
@@ -119,10 +130,9 @@
         <% } %>
         <a href="javascript:;" onclick="vsPostMessage('inputChangePage', {});">跳转到</a>
         <span>共<%= it.topicState.allPage %>页</span>
+        <a class="reply-input" href="javascript:;" onclick="vsPostMessage('reply', {input:''});">回复</a>
       </div>
-      <div class="reply-input">
-          <a href="javascript:;" onclick="vsPostMessage('reply', {input:''});">回复</a>
-      </div>
+
 
     </div>
     <script src="<%= it.contextPath %>/src/templates/topic.js"></script>

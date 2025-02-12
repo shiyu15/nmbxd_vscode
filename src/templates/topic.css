@@ -35,7 +35,10 @@ hr {
   flex-direction: column;
 }
 .topic {
+  border-radius: 6px;
   padding: 5px 10px 5px;
+  background-color: var(--vscode-editor-inactiveSelectionBackground);
+  color: var(--vscode-editor-foreground);
   margin-bottom: 10px;
 }
 .topic-header {
@@ -53,9 +56,21 @@ hr {
   flex-shrink: 0;
   border-radius: 4px;
 }
+.tooltip {
+  position: fixed;
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  display: none;
+  z-index: 1000;
+  max-width: 300px;
+}
 .topic-meta {
   display: flex;
   align-items: center;
+  margin-bottom: 10px;
 }
 .topic-meta .userHash {
   margin-left: 0px;
@@ -75,6 +90,18 @@ hr {
 .topic-meta .forumName {
   margin-left: 10px;
   color: aqua;
+}
+.topic-meta .collect {
+  margin-left: 10px;
+  color: #4daafc;
+}
+.topic-meta .refresh {
+  margin-left: 10px;
+  color: #4daafc;
+}
+.topic-meta .cite {
+  margin-left: 10px;
+  color: #4daafc;
 }
 .topic-meta .onlyAuthor {
   margin-left: 10px;
@@ -119,6 +146,13 @@ hr {
 }
 .word-content.append h2 {
   padding-bottom: 10px;
+}
+.reply-input {
+  margin-left: 10px;
+  color: #4daafc;
+}
+.cite-content {
+  color: #789922;
 }
 .right {
   margin-left: auto;

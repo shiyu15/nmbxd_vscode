@@ -50,15 +50,9 @@ export async function createTopicItem(topicList: TopicList){
   panel = _createPanel(topicList.id, label);
   panel.webview.onDidReceiveMessage(async (message) => {
     switch (message.command) {
-      // case "setTitle":
-      //   panel.title = _getTitle(message.title);
-      //   break;
-      // case "refresh":
-      //   loadTopicInPanel(panel, item.link, message.page);
-      //   break;
-      // case "pageTurning":
-      //   loadTopicInPanel(panel, item.link, message.page);
-      //   break;
+      case "refresh":
+        loadTopicInPanel(panel, topicList, topicState);
+        break;
       // case "collect":
       //   collectPost(panel, topic);
       //   break;
@@ -91,6 +85,9 @@ export async function createTopicItem(topicList: TopicList){
         const replyInput:string=message.input;
         NMBXD.reply(replyInput, topicList.id);
         loadTopicInPanel(panel, topicList, topicState);
+        break;
+      case 'requestTooltip':
+        handleTooltipRequest(panel, message);
         break;
       default:
         break;
@@ -135,9 +132,12 @@ function loadTopicInPanel(
       contextPath: Global.getWebViewContextPath(panel.webview),
     });
     const pageString=topicState.page.toString();
+    
     // 获取详情数据
     NMBXD.getTopic(topicList.id, topicList.forumName, pageString, topicState.isOnlyAuthor)
       .then((detail) => {
+          detail=handleCite(detail);
+
           topicState.allPage=Math.ceil((detail.replyCount)/19);
           panel.webview.html = NMBXD.renderPage("topic.html", {
             topicList: detail,
@@ -176,3 +176,70 @@ function loadTopicInPanel(
           });
       });
   }
+
+async function handleTooltipRequest(panel: vscode.WebviewPanel, message: any) {
+    try {
+        let tooltipContent = '';
+        
+        switch (message.type) {
+            case 'topic':
+                // 使用已有的网络调用逻辑获取数据
+                const topicDetail = await NMBXD.getReference(message.id);
+                tooltipContent = `
+                    <div class="tooltip-content">
+                        <div class="tooltip-header">
+                            <span class="tooltip-hash">${topicDetail.userHash}</span>
+                            <span class="tooltip-id">No.${topicDetail.id}</span>
+                            <span class="tooltip-time">${topicDetail.now}</span>
+                        </div>
+                        ${topicDetail.img ? 
+                            `<div class="tooltip-img">
+                                <img src="${NMBXD.getImageUrlBase()}thumb/${topicDetail.img}${topicDetail.ext}" />
+                            </div>` : ''
+                        }
+                        <div class="tooltip-content-text">${topicDetail.content}</div>
+                    </div>
+                `;
+                break;
+        }
+
+        // 发送消息回 webview 显示提示框
+        panel.webview.postMessage({
+            command: 'showTooltip',
+            content: tooltipContent,
+            x: message.x,
+            y: message.y
+        });
+    } catch (error) {
+        console.error('获取提示信息失败:', error);
+    }
+}
+
+
+/**
+ * 处理引用内容
+ * @param content 内容
+ * @returns 处理后的内容
+ */
+function handleCite(detail: TopicList): TopicList {          
+  // 处理主贴内容
+  const quoteRegex = /^<font color=\\"#789922\\">&gt;&gt;No\.(\d+)<\/font><br \/>\n/;
+  const mainMatch = detail.content.match(quoteRegex);
+  if (mainMatch) {
+      detail.cite = mainMatch[0];  // 保存引用内容
+      detail.content = detail.content.replace(quoteRegex, '');  // 移除原内容中的引用
+  }
+
+  // 处理回复内容
+  if (detail.replies) {
+      detail.replies = detail.replies.map(reply => {
+          const replyMatch = reply.content.match(quoteRegex);
+          if (replyMatch) {
+              reply.cite = replyMatch[0];  // 保存引用内容
+              reply.content = reply.content.replace(quoteRegex, '');  // 移除原内容中的引用
+          }
+          return reply;
+      });
+  }
+  return detail;
+}

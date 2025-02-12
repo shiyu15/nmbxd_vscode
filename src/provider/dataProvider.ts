@@ -34,10 +34,10 @@ export class DataProvider implements TreeDataProvider<ForumItem> {
             // 返回顶层类别
             return this.forumData.map(category =>{
                 //处理版块列表
-                let forum=new ForumItem(category.name, category.fid, TreeItemCollapsibleState.Collapsed,true);
+                let forum=new ForumItem(category.name, category.fid, TreeItemCollapsibleState.Collapsed,true,category.type);
                 //处理所属版块
                 forum.children = forum.children.concat(category.child.map(elementContent => {
-                    const child=new ForumItem(elementContent.name, elementContent.fid, TreeItemCollapsibleState.None,true);
+                    const child=new ForumItem(elementContent.name, elementContent.fid, TreeItemCollapsibleState.None,true,elementContent.type);
                     child.threadNumber=elementContent.threadNumber;
                     child.command={
                         command:"nmbxd.forumItemClick",
@@ -64,7 +64,8 @@ export class ForumItem extends TreeItem {
         // 版块的id和版块类别的id有重复，不用id，会不显示
         public readonly forumId: string,
         public readonly collapsibleState: TreeItemCollapsibleState,
-        public readonly isDir:boolean
+        public readonly isDir:boolean,
+        public readonly type:number
         
     ) {
         

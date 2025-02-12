@@ -41,6 +41,7 @@ export function activate(context: vscode.ExtensionContext) {
 		createTopicItem(item);
 	});
 
+
 	vscode.window.createTreeView("nmbxdForumList",{ 
 		treeDataProvider: new DataProvider(),
 		showCollapseAll: true}

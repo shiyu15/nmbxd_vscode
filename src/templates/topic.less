@@ -44,10 +44,10 @@ hr {
 }
 
 .topic {
-  // border-radius: 6px;
+  border-radius: 6px;
   padding: 5px 10px 5px;
-  // background-color: var(--vscode-editor-inactiveSelectionBackground);
-  // color: var(--vscode-editor-foreground);
+  background-color: var(--vscode-editor-inactiveSelectionBackground);
+  color: var(--vscode-editor-foreground);
   margin-bottom: 10px;
 }
 
@@ -69,19 +69,22 @@ hr {
   }
 }
 
+.tooltip {
+    position: fixed;
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    display: none;
+    z-index: 1000;
+    max-width: 300px;
+}
 
 .topic-meta {
   display: flex;
   align-items: center;
-  // margin-top: 10px;
-
-  // .node {
-  //   display: flex;
-  //   justify-content: space-between;
-  //   padding: 5px 0px;
-  //   background-color: var(--vscode-editor-inactiveSelectionBackground);
-  //   color: var(--vscode-editor-foreground);
-  // }
+  margin-bottom: 10px;
 
   .userHash {
     margin-left: 0px;
@@ -106,6 +109,21 @@ hr {
   .forumName {
     margin-left: 10px;
     color:aqua;
+  }
+
+  .collect {
+    margin-left: 10px;
+    color:#4daafc;
+  }
+
+  .refresh {
+    margin-left: 10px;
+    color:#4daafc;
+  }
+
+  .cite {
+    margin-left: 10px;
+    color:#4daafc;
   }
 
   
@@ -167,6 +185,15 @@ hr {
       padding-bottom: 10px;
     }
   }
+}
+.reply-input {
+  margin-left: 10px;
+  color:#4daafc;
+}
+
+
+.cite-content {
+  color: #789922;
 }
 
 .right{

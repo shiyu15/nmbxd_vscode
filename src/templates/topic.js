@@ -21,6 +21,69 @@ images.forEach((image, index) => {
     });
 });
 
+// 修改悬浮提示相关代码
+document.addEventListener('DOMContentLoaded', function() {
+  const topicIds = document.querySelectorAll('.cite-content');
+  topicIds.forEach(element => {
+      element.addEventListener('mouseover', (event) => {
+          const id = element.textContent.replace('No.', '');
+          // 发送消息给 VSCode 扩展
+          vsPostMessage('requestTooltip', {
+              type: 'topic',
+              id: id,
+              x: event.pageX,
+              y: event.pageY
+          });
+      });
+      
+      element.addEventListener('mouseout', () => {
+          hideTooltip();
+      });
+  });
+});
+
+// 监听来自 VSCode 的消息
+window.addEventListener('message', event => {
+  const message = event.data;
+  switch (message.command) {
+      case 'showTooltip':
+          showTooltip(message.x, message.y, message.content);
+          break;
+  }
+});
+
+// 添加悬浮提示相关代码
+function showTooltip(x, y, content) {
+  const tooltip = document.getElementById('tooltip');
+  tooltip.innerHTML = content;
+  tooltip.style.display = 'block';
+  
+  // 计算位置，确保提示框不会超出视窗
+  const tooltipWidth = tooltip.offsetWidth;
+  const tooltipHeight = tooltip.offsetHeight;
+  const windowWidth = window.innerWidth;
+  const windowHeight = window.innerHeight;
+
+  // 调整X坐标，确保提示框不会超出右边界
+  if (x + tooltipWidth > windowWidth) {
+      tooltip.style.left = (x - tooltipWidth - 10) + 'px';
+  } else {
+      tooltip.style.left = x + 'px';
+  }
+
+  // 调整Y坐标，确保提示框不会超出下边界
+  if (y + tooltipHeight > windowHeight) {
+      tooltip.style.top = (y - tooltipHeight - 10) + 'px';
+  } else {
+      tooltip.style.top = y + 'px';
+  }
+}
+
+function hideTooltip() {
+  const tooltip = document.getElementById('tooltip');
+  tooltip.style.display = 'none';
+}
+
 // const vscode = acquireVsCodeApi();
 
 // const vsPostMessage = (command, messages) => {
@@ -181,3 +244,4 @@ images.forEach((image, index) => {
 //   text = "" + text;
 //   return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&apos;");;
 // }
+

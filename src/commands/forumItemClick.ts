@@ -69,6 +69,9 @@ export async function createForumItem(item: ForumItem){
       case "topicOpen":
         createTopicItem(message.topic);
         break;
+      case "refresh":
+        loadTopicListInPanel(panel, item, forumState);
+        break;
       case "post":
         NMBXD.postThread(item.forumId);
         break;
@@ -112,7 +115,7 @@ function loadTopicListInPanel(
     });
     const pageString=forumState.page.toString();
     // 获取详情数据
-    NMBXD.getTopicList(item.forumId, item.label, pageString)
+    NMBXD.getTopicList(item.forumId, item.label, pageString, item.type)
       .then((detail) => {
           panel.webview.html = NMBXD.renderPage("topicList.html", {
             topicList: detail,
@@ -121,29 +124,9 @@ function loadTopicListInPanel(
             forumState:forumState,
           });
         }
-        // } else {
-        //   panel.webview.html = NGA.renderPage("topic.html", {
-        //     topic: detail,
-        //     contextPath: Global.getWebViewContextPath(panel.webview),
-        //   });
-        // }
         )
       .catch((err: Error) => {
         console.error(err);
-        // if (err instanceof LoginRequiredError) {
-        //   panel.webview.html = NGA.renderPage("error.html", {
-        //     contextPath: Global.getWebViewContextPath(panel.webview),
-        //     message: err.message,
-        //     showLogin: true,
-        //     showRefresh: true,
-        //   });
-        // } else if (err instanceof AccountRestrictedError) {
-        //   panel.webview.html = NGA.renderPage("error.html", {
-        //     contextPath: Global.getWebViewContextPath(panel.webview),
-        //     message: err.message,
-        //     showRefresh: false,
-        //   });
-        // } else {
           panel.webview.html = NMBXD.renderPage("error.html", {
             contextPath: Global.getWebViewContextPath(panel.webview),
             message: err.message,
