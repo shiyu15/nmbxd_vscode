@@ -11,7 +11,6 @@ export class TopicList{
     //发帖人id:
     public userHash:string="";
 
-    public cite:string="";
     // 帖子内容
     public content:string="";
 
@@ -29,7 +28,7 @@ export class TopicList{
 
     constructor(name:string, id: string = "", fid: string = "", now: string="", userHash:string="",
         content:string, replyList: TopicList[], sage:boolean, hide:boolean, replyCount:number,
-        img:string, ext:string, cite?: string) {
+        img:string, ext:string) {
         this.forumName=name;
         this.id = id;
         this.fid= fid;
@@ -42,7 +41,6 @@ export class TopicList{
         this.replyCount=replyCount;
         this.img=img;
         this.ext=ext;
-        this.cite = cite || "";
     }
 }
 

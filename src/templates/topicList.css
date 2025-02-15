@@ -29,7 +29,7 @@ hr {
 }
 .forum {
   min-width: 400px;
-  max-width: 700px;
+  max-width: 900px;
   padding: 20px;
   margin: 5px auto;
   flex-direction: column;
@@ -105,8 +105,95 @@ hr {
   margin-left: 10px;
 }
 .content {
-  display: flex;
-  flex-direction: row;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 10px;
+}
+.content .img-content {
+  margin-bottom: 10px;
+  width: 150px;
+  transition: width 0.3s ease;
+}
+.content .img-content.expanded {
+  width: 600px;
+}
+.content .img-content img {
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.content .word-content {
+  min-width: 0;
+  line-height: 1.5;
+  word-break: break-all;
+  overflow-wrap: break-word;
+}
+.content::after {
+  content: '';
+  display: table;
+  clear: both;
+}
+.tooltip {
+  position: fixed;
+  background: var(--vscode-editor-background);
+  border: 1px solid var(--vscode-editorIndentGuide-background);
+  padding: 10px;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  display: none;
+  z-index: 9999;
+  max-width: 400px;
+  pointer-events: auto;
+  color: var(--vscode-editor-foreground);
+}
+.tooltip .tooltip-close {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 16px;
+  height: 16px;
+  line-height: 16px;
+  text-align: center;
+  color: #ff4444;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: 50%;
+}
+.tooltip .tooltip-close:hover {
+  background-color: rgba(255, 68, 68, 0.1);
+}
+.tooltip .tooltip-content {
+  padding-right: 20px;
+}
+.tooltip .tooltip-header {
+  margin-bottom: 8px;
+}
+.tooltip .tooltip-header .tooltip-hash {
+  color: aqua;
+}
+.tooltip .tooltip-header .tooltip-id {
+  margin-left: 10px;
+}
+.tooltip .tooltip-header .tooltip-time {
+  margin-left: auto;
+  opacity: 0.5;
+}
+.tooltip .tooltip-img {
+  margin: 5px 0;
+}
+.tooltip .tooltip-img img {
+  max-width: 150px;
+  height: auto;
+}
+.tooltip .tooltip-content-text {
+  line-height: 1.4;
+  word-break: break-all;
+}
+.quote-link {
+  color: #789922;
 }
 .word-content {
   line-height: 1.5;

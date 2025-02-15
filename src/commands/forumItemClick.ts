@@ -75,6 +75,13 @@ export async function createForumItem(item: ForumItem){
       case "post":
         NMBXD.postThread(item.forumId);
         break;
+      case 'requestTooltip':
+        console.log(message);
+        handleTooltipRequest(panel, message);
+        break;
+      case 'debug':
+        console.log(message); // 输出到 VSCode 的调试控制台
+        break;
       default:
         break;
     }
@@ -134,3 +141,39 @@ function loadTopicListInPanel(
           });
       });
   }
+
+  async function handleTooltipRequest(panel: vscode.WebviewPanel, message: any) {
+    try {
+        let tooltipContent = '';
+        
+        switch (message.type) {
+            case 'topic':
+                const topicDetail = await NMBXD.getReference(message.id);
+                tooltipContent = `
+                    <div class="tooltip-content">
+                        <div class="tooltip-header">
+                            <span class="tooltip-hash">${topicDetail.userHash}</span>
+                            <span class="tooltip-id">No.${topicDetail.id}</span>
+                            <span class="tooltip-time">${topicDetail.now}</span>
+                        </div>
+                        ${topicDetail.img ? 
+                            `<div class="tooltip-img">
+                                <img src="${NMBXD.getImageUrlBase()}thumb/${topicDetail.img}${topicDetail.ext}" />
+                            </div>` : ''
+                        }
+                        <div class="tooltip-content-text">${topicDetail.content}</div>
+                    </div>
+                `;
+                break;
+        }
+        console.log(tooltipContent);
+        panel.webview.postMessage({
+            command: 'showTooltip',
+            content: tooltipContent,
+            x: message.x,
+            y: message.y
+        });
+    } catch (error) {
+        console.error('获取提示信息失败:', error);
+    }
+}

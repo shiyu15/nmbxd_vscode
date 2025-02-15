@@ -87,7 +87,11 @@ export async function createTopicItem(topicList: TopicList){
         loadTopicInPanel(panel, topicList, topicState);
         break;
       case 'requestTooltip':
+        console.log(message);
         handleTooltipRequest(panel, message);
+        break;
+      case 'debug':
+        console.log(message); // 输出到 VSCode 的调试控制台
         break;
       default:
         break;
@@ -136,8 +140,6 @@ function loadTopicInPanel(
     // 获取详情数据
     NMBXD.getTopic(topicList.id, topicList.forumName, pageString, topicState.isOnlyAuthor)
       .then((detail) => {
-          detail=handleCite(detail);
-
           topicState.allPage=Math.ceil((detail.replyCount)/19);
           panel.webview.html = NMBXD.renderPage("topic.html", {
             topicList: detail,
@@ -183,7 +185,6 @@ async function handleTooltipRequest(panel: vscode.WebviewPanel, message: any) {
         
         switch (message.type) {
             case 'topic':
-                // 使用已有的网络调用逻辑获取数据
                 const topicDetail = await NMBXD.getReference(message.id);
                 tooltipContent = `
                     <div class="tooltip-content">
@@ -202,8 +203,7 @@ async function handleTooltipRequest(panel: vscode.WebviewPanel, message: any) {
                 `;
                 break;
         }
-
-        // 发送消息回 webview 显示提示框
+        console.log(tooltipContent);
         panel.webview.postMessage({
             command: 'showTooltip',
             content: tooltipContent,
@@ -216,30 +216,4 @@ async function handleTooltipRequest(panel: vscode.WebviewPanel, message: any) {
 }
 
 
-/**
- * 处理引用内容
- * @param content 内容
- * @returns 处理后的内容
- */
-function handleCite(detail: TopicList): TopicList {          
-  // 处理主贴内容
-  const quoteRegex = /^<font color=\\"#789922\\">&gt;&gt;No\.(\d+)<\/font><br \/>\n/;
-  const mainMatch = detail.content.match(quoteRegex);
-  if (mainMatch) {
-      detail.cite = mainMatch[0];  // 保存引用内容
-      detail.content = detail.content.replace(quoteRegex, '');  // 移除原内容中的引用
-  }
 
-  // 处理回复内容
-  if (detail.replies) {
-      detail.replies = detail.replies.map(reply => {
-          const replyMatch = reply.content.match(quoteRegex);
-          if (replyMatch) {
-              reply.cite = replyMatch[0];  // 保存引用内容
-              reply.content = reply.content.replace(quoteRegex, '');  // 移除原内容中的引用
-          }
-          return reply;
-      });
-  }
-  return detail;
-}

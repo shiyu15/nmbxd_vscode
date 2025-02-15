@@ -22,17 +22,15 @@
           
           <!-- 正文 -->
           <div class="content">
-
-              <% if (it.topicList.img) { %>
-                  <div class="img-content"><img src="<%= it.imageUrlBase+ "thumb/" + it.topicList.img + it.topicList.ext %>" alt="image" /></div>
+              <% if (it.img) { %>
+                  <div class="img-content">
+                      <img src="<%= it.imageUrlBase+ "thumb/" + it.img + it.ext %>" alt="image" />
+                  </div>
               <% } %>
-              <% if (it.topicList.cite) { %>
-                <div class="cite-content"><%~ it.topicList.cite %></div>
-              <% } %>
-              <% if (it.topicList.content) { %>
-                  <div class="word-content" style="margin-bottom: 10px"><%~ it.topicList.content %></div>
+              <% if (it.content) { %>
+                  <div class="word-content"><%~ it.content %></div>
               <% } else { %>
-                  <div class="word-content" style="margin-bottom: 10px"></div>
+                  <div class="word-content"></div>
               <% } %>
           </div>
 
@@ -92,14 +90,11 @@
                           <div class="time"><%= reply.now %></div>
                       </div>
                       
-                      <!-- 正文 -->
+                      <!-- 回帖正文 -->
                       <div class="content">
 
                         <% if (reply.img) { %>
                             <div class="img-content"><img src="<%= it.imageUrlBase+ "thumb/" + reply.img + reply.ext %>" alt="image" /></div>
-                        <% } %>
-                        <% if (reply.cite) { %>
-                          <div class="cite-content"><%~ reply.cite %></div>
                         <% } %>
                         <% if (reply.content) { %>
                             <div class="word-content"><%~ reply.content %></div>

@@ -12,6 +12,8 @@
         <link rel="stylesheet" href="<%= it.contextPath %>/src/templates/topicList.css" />
     </head>
 <body>
+    <!-- 添加 tooltip div -->
+    <div id="tooltip" class="tooltip"></div>
     <div class="forum">
     <!-- 标题 -->
     <div class="topic-header">
@@ -38,7 +40,10 @@
             <!-- 正文 -->
             <div class="content">
                 <% if (topic.img) { %>
-                <div class="img-content"><img src="<%= it.imageUrlBase+ "thumb/" + topic.img + topic.ext %>" alt="image" /></div>
+                <div class="img-content">
+                    <img src="<%= it.imageUrlBase+ "thumb/" + topic.img + topic.ext %>" 
+                         alt="image"" />
+                </div>
                 <% } %>
                 <% if (topic.content) { %>
                 <div class="word-content" style="margin-bottom: 10px"><%~ topic.content %></div>
@@ -73,6 +78,9 @@
                         </div>
                         
                         <!-- 正文 -->
+                        <% if (reply.img) { %>
+                            <div class="img-content"><img src="<%= it.imageUrlBase+ "thumb/" + reply.img + reply.ext %>" alt="image" /></div>
+                        <% } %>
                         <% if (reply.content) { %>
                         <div class="word-content"><%~ reply.content %></div>
                         <% } else { %>

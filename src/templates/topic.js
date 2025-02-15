@@ -9,79 +9,146 @@ const vsPostMessage = (command, messages) => {
 
 
 //点击图片后切换大图和小图显示
-const images = document.querySelectorAll('img');
+const images = document.querySelectorAll('.img-content');
 images.forEach((image, index) => {
     image.addEventListener('click', function() {
+        const img = this.querySelector('img');
+        if (!img) return;
+
         // 动态切换图片的src属性
-        if(this.src.includes("thumb")){
-            this.src = this.src.replace("thumb/", "image/");
-        }else{
-            this.src = this.src.replace("image/", "thumb/");
+        if (img.src.includes("thumb")) {
+            // 切换到大图
+            img.src = img.src.replace("thumb/", "image/");
+            img.classList.add('expanded');
+        } else {
+            // 切换回小图
+            img.src = img.src.replace("image/", "thumb/");
+            img.classList.remove('expanded');
         }
     });
 });
 
-// 修改悬浮提示相关代码
-document.addEventListener('DOMContentLoaded', function() {
-  const topicIds = document.querySelectorAll('.cite-content');
-  topicIds.forEach(element => {
-      element.addEventListener('mouseover', (event) => {
-          const id = element.textContent.replace('No.', '');
-          // 发送消息给 VSCode 扩展
-          vsPostMessage('requestTooltip', {
-              type: 'topic',
-              id: id,
-              x: event.pageX,
-              y: event.pageY
-          });
-      });
-      
-      element.addEventListener('mouseout', () => {
-          hideTooltip();
-      });
-  });
+
+// 初始化和页面更新时都需要处理引用
+document.addEventListener('DOMContentLoaded', () => {
+    processQuoteLinks();
 });
 
-// 监听来自 VSCode 的消息
+// 添加变量来跟踪当前激活的链接
+let activeLink = null;
+let tooltipTimeout = null;
+
+
+function processQuoteLinks() {
+    const contentElements = document.querySelectorAll('.word-content');
+
+    contentElements.forEach(element => {
+        const pattern = /<font color="#789922">&gt;&gt;No\.(\d+)<\/font>/g;
+        let html = element.innerHTML;
+        html = html.replace(pattern, (match, id) => {
+            return `<span class="quote-link" data-id="${id}">&gt;&gt;No.${id}</span>`;
+        });
+        element.innerHTML = html;
+
+        const links = element.getElementsByClassName('quote-link');
+        Array.from(links).forEach(link => {
+            const newLink = link.cloneNode(true);
+            link.parentNode.replaceChild(newLink, link);
+
+            newLink.onmouseover = (event) => {
+                if (tooltipTimeout) {
+                    clearTimeout(tooltipTimeout);
+                    tooltipTimeout = null;
+                }
+                
+                if (activeLink && activeLink !== newLink) {
+                    activeLink.style.color = "#789922";
+                    hideTooltip();
+                }
+                
+                activeLink = newLink;
+                const rect = event.target.getBoundingClientRect();
+                vsPostMessage('requestTooltip', {
+                    type: 'topic',
+                    id: newLink.dataset.id,
+                    x: rect.left,
+                    y: rect.bottom
+                });
+                
+                newLink.style.cursor = "pointer";
+                newLink.style.color = "#FF0000";
+            };
+
+            newLink.onmouseout = (event) => {
+                tooltipTimeout = setTimeout(() => {
+                    const tooltip = document.getElementById('tooltip');
+                    if (!tooltip) return;
+                    
+                    const tooltipRect = tooltip.getBoundingClientRect();
+                    const mouseX = event.clientX;
+                    const mouseY = event.clientY;
+
+                    if (mouseX < tooltipRect.left || mouseX > tooltipRect.right || 
+                        mouseY < tooltipRect.top || mouseY > tooltipRect.bottom) {
+                        hideTooltip();
+                        newLink.style.color = "#789922";
+                        activeLink = null;
+                    }
+                }, 50);
+            };
+        });
+    });
+}
+
+// 监听消息
 window.addEventListener('message', event => {
-  const message = event.data;
-  switch (message.command) {
-      case 'showTooltip':
-          showTooltip(message.x, message.y, message.content);
-          break;
-  }
+    const message = event.data;
+    switch (message.command) {
+        case 'showTooltip':
+            showTooltip(message.x, message.y, message.content);
+            break;
+    }
 });
 
-// 添加悬浮提示相关代码
 function showTooltip(x, y, content) {
-  const tooltip = document.getElementById('tooltip');
-  tooltip.innerHTML = content;
-  tooltip.style.display = 'block';
-  
-  // 计算位置，确保提示框不会超出视窗
-  const tooltipWidth = tooltip.offsetWidth;
-  const tooltipHeight = tooltip.offsetHeight;
-  const windowWidth = window.innerWidth;
-  const windowHeight = window.innerHeight;
+    const tooltip = document.getElementById('tooltip');
+    
+    // 添加关闭按钮和内容包装
+    tooltip.innerHTML = `
+        <div class="tooltip-close" onclick="hideTooltip(); if(activeLink){activeLink.style.color='#789922'; activeLink=null;}">×</div>
+        <div class="tooltip-content">
+            ${content}
+        </div>
+    `;
+    
+    tooltip.style.display = 'block';
+    
+    // 计算位置，确保提示框不会超出视窗
+    const tooltipWidth = tooltip.offsetWidth;
+    const tooltipHeight = tooltip.offsetHeight;
+    const windowWidth = window.innerWidth;
+    const windowHeight = window.innerHeight;
 
-  // 调整X坐标，确保提示框不会超出右边界
-  if (x + tooltipWidth > windowWidth) {
-      tooltip.style.left = (x - tooltipWidth - 10) + 'px';
-  } else {
-      tooltip.style.left = x + 'px';
-  }
+    // 调整X坐标，确保提示框不会超出右边界
+    if (x + tooltipWidth > windowWidth) {
+        tooltip.style.left = (x - tooltipWidth - 10) + 'px';
+    } else {
+        tooltip.style.left = x + 'px';
+    }
 
-  // 调整Y坐标，确保提示框不会超出下边界
-  if (y + tooltipHeight > windowHeight) {
-      tooltip.style.top = (y - tooltipHeight - 10) + 'px';
-  } else {
-      tooltip.style.top = y + 'px';
-  }
+    // 调整Y坐标，确保提示框不会超出下边界
+    if (y + tooltipHeight > windowHeight) {
+        tooltip.style.top = (y - tooltipHeight - 10) + 'px';
+    } else {
+        tooltip.style.top = y + 'px';
+    }
 }
 
 function hideTooltip() {
-  const tooltip = document.getElementById('tooltip');
-  tooltip.style.display = 'none';
+    const tooltip = document.getElementById('tooltip');
+    if (tooltip) {
+        tooltip.style.display = 'none';
+    }
 }
 
 // const vscode = acquireVsCodeApi();

@@ -112,7 +112,7 @@ export class NMBXD {
                 },
             });
         }
-        const topicList :TopicList[]=[];
+        let topicList :TopicList[]=[];
         if ('success' in response.data && response.data.success === false){
             console.error(response.data.error);
             vscode.window.showErrorMessage('登录失败, userhash无效');
@@ -177,7 +177,6 @@ export class NMBXD {
                 },
             });            
         }
-        const topicList :TopicList[]=[];
         let topic=response.data;
         let newTopic=new TopicList(
             forumName,
@@ -208,7 +207,6 @@ export class NMBXD {
                 reply.img,
                 reply.ext,
             ));
-            topicList.push(newTopic);
         }   
         return newTopic;
     }
@@ -389,6 +387,42 @@ export class NMBXD {
         return  false;
     }
 
+    /**
+     * 处理引用内容，将引用其他帖子的内容转移到quote字段。
+     * @param detail 帖子详情
+     * @returns 处理后的帖子详情
+     */
+    static handleQuote(detail: TopicList): TopicList {          
+        // // 处理主贴内容
+        // const quoteRegex = /^<font color=\"#789922\">&gt;&gt;No\.(\d+)<\/font><br \/>\n/;
+        // let mainMatch;
+        // while ((mainMatch = detail.content.match(quoteRegex)) !== null) {
+        //     detail.quote.push(mainMatch[0]);  // 累积保存引用内容
+        //     detail.content = detail.content.replace(quoteRegex, '');  // 移除原内容中的引用
+        // }
+    
+        // // 处理回复内容
+        // if (detail.replies) {
+        //     detail.replies = detail.replies.map(reply => {
+        //         let replyMatch;
+        //         reply.quote = [];  // 初始化引用内容
+        //         while ((replyMatch = reply.content.match(quoteRegex)) !== null) {
+        //             reply.quote.push(replyMatch[0]);  // 累积保存引用内容
+        //             reply.content = reply.content.replace(quoteRegex, '');  // 移除原内容中的引用
+        //         }
+        //         return reply;
+        //     });
+        // }
+        return detail;
+    }
+
+    /**
+     * 在VSCode中打开图片
+     * @param imageUrl 图片URL
+     */
+    static async viewImage(imageUrl: string): Promise<void> {
+        return vscode.commands.executeCommand('vscode.open', vscode.Uri.parse(imageUrl));
+    }
 
 }
 
