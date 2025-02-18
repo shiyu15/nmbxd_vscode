@@ -14,23 +14,23 @@
   "contributes": {
     "commands": [
       {
-        "command": "nmbxd.helloWorld",
-        "title": "Hello World"
-      },
-      {
         "command": "nmbxd.login",
         "title": "登录",
         "icon": "./images/login.svg"
       },
       {
-        "command": "nmbxd.forumItemClick",
-        "title": "版面点击"
+        "command": "nmbxd.addCollectId",
+        "title": "添加订阅ID"
       }
     ],
     "menus": {
       "view/title": [
         {
           "command": "nmbxd.login",
+          "when": "view==nmbxdForumList"
+        },
+        {
+          "command": "nmbxd.addCollectId",
           "when": "view==nmbxdForumList"
         }
       ]
@@ -49,10 +49,6 @@
         {
           "id": "nmbxdForumList",
           "name": "版面列表"
-        },
-        {
-          "id": "nmbxdFavorites",
-          "name": "收藏"
         }
       ]
     }

@@ -90,6 +90,12 @@ export async function createTopicItem(topicList: TopicList){
         console.log(message);
         handleTooltipRequest(panel, message);
         break;
+      case 'collect':
+        NMBXD.addCollect(message.input);
+        break;
+      case 'uncollect':
+        NMBXD.deleteCollect(message.input);
+        break;
       case 'debug':
         console.log(message); // 输出到 VSCode 的调试控制台
         break;

@@ -3,12 +3,22 @@ import http from "../http";
 import Global from "../global";
 import { NMBXD } from "../nmbxd";
 import { Forum, ForumData } from '../models/forum';
+import * as vscode from 'vscode';
 
 export class DataProvider implements TreeDataProvider<ForumItem> {
     private _onDidChangeTreeData: EventEmitter<ForumItem | undefined | null | void> = new EventEmitter<ForumItem | undefined | null | void>();
     readonly onDidChangeTreeData: Event<ForumItem | undefined | null | void> = this._onDidChangeTreeData.event;
 
     private forumData: Forum[] = [];
+    
+    // 添加缓存相关的方法
+    private async getCachedForumData(): Promise<Forum[]> {
+        return await Global.context?.globalState.get('cachedForumData') || [];
+    }
+
+    private async setCachedForumData(data: Forum[]) {
+        await Global.context?.globalState.update('cachedForumData', data);
+    }
 
     constructor() {
         this.refreshForumData();
@@ -16,11 +26,23 @@ export class DataProvider implements TreeDataProvider<ForumItem> {
 
     async refreshForumData() {
         try {
+            // 获取新数据
             this.forumData = await NMBXD.getForumTree();
+            // 更新缓存
+            await this.setCachedForumData(this.forumData);
             
             this._onDidChangeTreeData.fire();
         } catch (error) {
+            // 从缓存获取数据
+            this.forumData = await this.getCachedForumData();
+            if (this.forumData.length > 0) {
+                console.log("获取论坛数据失败，使用缓存数据");
+            } else {
+                console.log("获取论坛数据失败，且无可用缓存");
+                vscode.window.showErrorMessage("获取论坛数据失败，且无可用缓存");
+            }
             console.error("获取论坛数据失败:", error);
+            this._onDidChangeTreeData.fire();
         }
     }
 
@@ -34,10 +56,10 @@ export class DataProvider implements TreeDataProvider<ForumItem> {
             // 返回顶层类别
             return this.forumData.map(category =>{
                 //处理版块列表
-                let forum=new ForumItem(category.name, category.fid, TreeItemCollapsibleState.Collapsed,true,category.type);
+                let forum=new ForumItem(category.name, category.fid, TreeItemCollapsibleState.Collapsed,true,category.type===1,false);
                 //处理所属版块
                 forum.children = forum.children.concat(category.child.map(elementContent => {
-                    const child=new ForumItem(elementContent.name, elementContent.fid, TreeItemCollapsibleState.None,true,elementContent.type);
+                    const child=new ForumItem(elementContent.name, elementContent.fid, TreeItemCollapsibleState.None,true,elementContent.type===1,false);
                     child.threadNumber=elementContent.threadNumber;
                     child.command={
                         command:"nmbxd.forumItemClick",
@@ -61,11 +83,11 @@ export class DataProvider implements TreeDataProvider<ForumItem> {
 export class ForumItem extends TreeItem {
     constructor(
         public readonly label: string,
-        // 版块的id和版块类别的id有重复，不用id，会不显示
         public readonly forumId: string,
         public readonly collapsibleState: TreeItemCollapsibleState,
         public readonly isDir:boolean,
-        public readonly type:number
+        public readonly isTimeLine:boolean,
+        public readonly isCollect:boolean
         
     ) {
         

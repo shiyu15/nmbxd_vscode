@@ -4,7 +4,7 @@
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8">
         <title>
-            <%= it.topicList[0].forumName %>        
+            <%= it.title %>        
         </title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <base href="https://www.nmbxd1.com" />
@@ -17,11 +17,12 @@
     <div class="forum">
     <!-- 标题 -->
     <div class="topic-header">
-        <h1><a href="/f/<%= it.topicList[0].forumName %>"><%= it.topicList[0].forumName %></a></h1>
+        <h1><a href="/f/<%= it.topicList[0].forumName %>"><%= it.title %>  </a></h1>
         <!-- <img src="{{authorAvatar}}" alt="avatar" /> -->
     </div>
     <span class="post" href="javascript:;" onclick="vsPostMessage('post', {input:'',});">发串</span>
     <span class="refresh" href="javascript:;" onclick="vsPostMessage('refresh', {});">刷新</span>
+    <span class="topicIdJump" href="javascript:;" onclick="vsPostMessage('topicIdJump', {});">串号跳转</span>
     <% for (const topic of it.topicList){ %>
         <div class="topic">
             <!-- 作者、时间、帖子号 --> 
@@ -29,9 +30,10 @@
                 <!-- <div class="node"> -->
                     <span class="userHash"><%= topic.userHash %></span>
                     <span class="topicId">No.<%= topic.id %></span>
-                    <span class="forumName"><%= it.topicList[0].forumName %></span>
+                    <span class="forumName"><%= topic.forumName %></span>
                     <a class="open" href="javascript:;" onclick="vsPostMessage('topicOpen', {topic:<%= JSON.stringify(topic) %>});">打开</a>
-                    <span class="collect">收藏</span>
+                    <a class="collect" href="javascript:;" onclick="vsPostMessage('collect', {input:'<%= topic.id %>',});">收藏</a>
+                    <a class="collect" href="javascript:;" onclick="vsPostMessage('uncollect', {input:'<%= topic.id %>',});">取消收藏</a>
                     <span class="time"><%= topic.now %></span>
                     <!-- <a style="margin-left: 10px" href="/t/<%= topic.id %>">浏览器中打开</a> -->
                 <!-- </div> -->

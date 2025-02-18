@@ -79,6 +79,20 @@ export async function createForumItem(item: ForumItem){
         console.log(message);
         handleTooltipRequest(panel, message);
         break;
+      case 'topicIdJump':
+        console.log(message);
+        let topicId=await getTopicId();
+        if(topicId!==""){
+          let topic=await NMBXD.getTopic(topicId, "", "1", false);
+          createTopicItem(topic);
+        }
+        break;
+      case 'collect':
+        NMBXD.addCollect(message.input);
+        break;
+      case 'uncollect':
+        NMBXD.deleteCollect(message.input);
+        break;
       case 'debug':
         console.log(message); // 输出到 VSCode 的调试控制台
         break;
@@ -90,6 +104,25 @@ export async function createForumItem(item: ForumItem){
   console.log(item.forumId);
   loadTopicListInPanel(panel, item, forumState);
 }
+
+async function getTopicId(): Promise<string> {
+  let topicId = await vscode.window.showInputBox({
+      placeHolder: `请输入串号`,
+      prompt: '',
+      value: ''
+    });
+  const topicIdRegex = /(\d+)$/;
+  if (topicId === undefined || topicId === "") {
+      vscode.window.showErrorMessage('串号不能为空');
+      return '';  
+  }
+  if (!topicIdRegex.test(topicId)) {
+      vscode.window.showErrorMessage('串号格式不正确，应为12345678');
+      return '';
+  }
+  return topicId;
+}
+
 
 async function changePage(): Promise<number> {
   let page:string | undefined = await vscode.window.showInputBox({
@@ -121,10 +154,31 @@ function loadTopicListInPanel(
       contextPath: Global.getWebViewContextPath(panel.webview),
     });
     const pageString=forumState.page.toString();
-    // 获取详情数据
-    NMBXD.getTopicList(item.forumId, item.label, pageString, item.type)
+    if(!item.isCollect){//访问普通分论坛
+      NMBXD.getTopicList(item.forumId,pageString, item.isTimeLine)
+        .then((detail) => {
+            panel.webview.html = NMBXD.renderPage("topicList.html", {
+              title:item.label,
+              topicList: detail,
+              contextPath: Global.getWebViewContextPath(panel.webview),
+              imageUrlBase: NMBXD.getImageUrlBase(),
+              forumState:forumState,
+            });
+          }
+          )
+        .catch((err: Error) => {
+          console.error(err);
+            panel.webview.html = NMBXD.renderPage("error.html", {
+              contextPath: Global.getWebViewContextPath(panel.webview),
+              message: err.message,
+              showRefresh: true,
+            });
+        });
+    }else{//访问收藏列表
+      NMBXD.getCollectList(pageString)
       .then((detail) => {
           panel.webview.html = NMBXD.renderPage("topicList.html", {
+            title:item.label,
             topicList: detail,
             contextPath: Global.getWebViewContextPath(panel.webview),
             imageUrlBase: NMBXD.getImageUrlBase(),
@@ -140,6 +194,7 @@ function loadTopicListInPanel(
             showRefresh: true,
           });
       });
+    }
   }
 
   async function handleTooltipRequest(panel: vscode.WebviewPanel, message: any) {

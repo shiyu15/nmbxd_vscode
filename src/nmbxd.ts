@@ -28,14 +28,8 @@ export class NMBXD {
 
     static async getForumTree(): Promise<Forum[]> {
         const responseForum = await http.get(`https://${Global.getApiUrl()}/getForumList`, {
-            headers: {
-                Cookie: `userhash=${Global.getUserHash()}`
-            },
         });
         let responseTimeLine = await http.get(`https://${Global.getApiUrl()}/getTimelineList`, {
-            headers: {
-                Cookie: `userhash=${Global.getUserHash()}`
-            },            
         });
         let dataTimeLine:any={};
         dataTimeLine.id=-1;
@@ -95,11 +89,11 @@ export class NMBXD {
     
     
     // 获取版面的帖子列表，注意普通版面和时间线版面调用的api不一样
-    static async getTopicList(fid: string, forumName:string, page:string, type:number): Promise<TopicList[]> {
+    static async getTopicList(fid: string, page:string, isTimeLine:boolean): Promise<TopicList[]> {
         
         let response;
         // 0为普通板块，1为时间线板块
-        if(type===0){
+        if(!isTimeLine){
             response=await http.get(`https://${Global.getApiUrl()}/showf?id=${fid}&page=${page}`,{
                 headers: {
                     Cookie: `userhash=${Global.getUserHash()}`,
@@ -121,22 +115,22 @@ export class NMBXD {
         else{
             for(const topic of response.data){
                 let newTopic=new TopicList(
-                forumName,
-                topic.id,
-                topic.fid,
-                topic.now,
-                topic.user_hash,
-                topic.content,
-                [] as TopicList[],
-                topic.sage,
-                topic.hide,
-                topic.ReplyCount,
-                topic.img,
-                topic.ext,
-            );
+                    Global.getFnameByFid(topic.fid),
+                    topic.id,
+                    topic.fid,
+                    topic.now,
+                    topic.user_hash,
+                    topic.content,
+                    [] as TopicList[],
+                    topic.sage,
+                    topic.hide,
+                    topic.ReplyCount,
+                    topic.img,
+                    topic.ext,
+                );
             for(const reply of topic.Replies){
                 newTopic.replies.push(new TopicList(
-                    forumName,
+                    topic.forumName,
                     reply.id,
                     reply.fid,
                     reply.now,
@@ -154,6 +148,40 @@ export class NMBXD {
             }   
         }
         return topicList;
+    }
+
+    static async getCollectList( page:string): Promise<TopicList[]> {
+        let response=await http.get(`https://${Global.getApiUrl()}/feed?uuid=${Global.getCollectId()}&page=${page}`,{
+                headers: {
+                    Cookie: `userhash=${Global.getUserHash()}`
+                },
+            });
+            let topicList :TopicList[]=[];
+            if ('success' in response.data && response.data.success === false){
+                console.error(response.data.error);
+                vscode.window.showErrorMessage('登录失败, userhash无效');
+                throw new Error('登录失败: userhash无效');
+            }
+            else{
+                for(const topic of response.data){
+                    let newTopic=new TopicList(
+                        Global.getFnameByFid(topic.fid),
+                        topic.id,
+                        topic.fid,
+                        topic.now,
+                        topic.user_hash,
+                        topic.content,
+                        [] as TopicList[],
+                        topic.sage,
+                        topic.hide,
+                        topic.reply_count,
+                        topic.img,
+                        topic.ext,
+                    );
+                    topicList.push(newTopic);
+                }   
+            }
+            return topicList;
     }
 
     static getImageUrlBase(): string {
@@ -179,7 +207,7 @@ export class NMBXD {
         }
         let topic=response.data;
         let newTopic=new TopicList(
-            forumName,
+            Global.getFnameByFid(topic.fid),
             topic.id,
             topic.fid,
             topic.now,
@@ -194,7 +222,7 @@ export class NMBXD {
         );
         for(const reply of topic.Replies){
             newTopic.replies.push(new TopicList(
-                forumName,
+                newTopic.forumName,
                 reply.id,
                 topic.fid,
                 reply.now,
@@ -387,42 +415,38 @@ export class NMBXD {
         return  false;
     }
 
-    /**
-     * 处理引用内容，将引用其他帖子的内容转移到quote字段。
-     * @param detail 帖子详情
-     * @returns 处理后的帖子详情
-     */
-    static handleQuote(detail: TopicList): TopicList {          
-        // // 处理主贴内容
-        // const quoteRegex = /^<font color=\"#789922\">&gt;&gt;No\.(\d+)<\/font><br \/>\n/;
-        // let mainMatch;
-        // while ((mainMatch = detail.content.match(quoteRegex)) !== null) {
-        //     detail.quote.push(mainMatch[0]);  // 累积保存引用内容
-        //     detail.content = detail.content.replace(quoteRegex, '');  // 移除原内容中的引用
-        // }
-    
-        // // 处理回复内容
-        // if (detail.replies) {
-        //     detail.replies = detail.replies.map(reply => {
-        //         let replyMatch;
-        //         reply.quote = [];  // 初始化引用内容
-        //         while ((replyMatch = reply.content.match(quoteRegex)) !== null) {
-        //             reply.quote.push(replyMatch[0]);  // 累积保存引用内容
-        //             reply.content = reply.content.replace(quoteRegex, '');  // 移除原内容中的引用
-        //         }
-        //         return reply;
-        //     });
-        // }
-        return detail;
+
+    //添加订阅
+    static async addCollect(fid:string):Promise<boolean>{
+        let response;
+        response=await http.post(`https://${Global.getApiUrl()}/addFeed?uuid=${Global.getCollectId()}`,{
+            payload:{
+                tid:fid
+            }
+        });
+        if(response.data.includes("订阅大成功")){
+            vscode.window.showInformationMessage("订阅成功");   
+            return true;
+        }else{
+            vscode.window.showErrorMessage("订阅失败");
+            return false;
+        }
     }
 
-    /**
-     * 在VSCode中打开图片
-     * @param imageUrl 图片URL
-     */
-    static async viewImage(imageUrl: string): Promise<void> {
-        return vscode.commands.executeCommand('vscode.open', vscode.Uri.parse(imageUrl));
+    //删除订阅
+    static async deleteCollect(fid:string):Promise<boolean>{
+        let response;
+        response=await http.post(`https://${Global.getApiUrl()}/delFeed?uuid=${Global.getCollectId()}`,{
+            payload:{
+                tid:fid 
+            }
+        });
+        if(response.data.includes("取消订阅成功")){
+            vscode.window.showInformationMessage("取消订阅成功");
+            return true;
+        }else{
+            vscode.window.showErrorMessage("取消订阅失败");
+            return false;
+        }
     }
-
 }
-

@@ -19,11 +19,11 @@ images.forEach((image, index) => {
         if (img.src.includes("thumb")) {
             // 切换到大图
             img.src = img.src.replace("thumb/", "image/");
-            img.classList.add('expanded');
+            this.classList.add('expanded');
         } else {
             // 切换回小图
             img.src = img.src.replace("image/", "thumb/");
-            img.classList.remove('expanded');
+            this.classList.remove('expanded');
         }
     });
 });

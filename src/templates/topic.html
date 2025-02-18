@@ -22,13 +22,13 @@
           
           <!-- 正文 -->
           <div class="content">
-              <% if (it.img) { %>
+              <% if (it.topicList.img) { %>
                   <div class="img-content">
-                      <img src="<%= it.imageUrlBase+ "thumb/" + it.img + it.ext %>" alt="image" />
+                      <img src="<%= it.imageUrlBase+ "thumb/" + it.topicList.img + it.topicList.ext %>" alt="image" />
                   </div>
               <% } %>
-              <% if (it.content) { %>
-                  <div class="word-content"><%~ it.content %></div>
+              <% if (it.topicList.content) { %>
+                  <div class="word-content"><%~ it.topicList.content %></div>
               <% } else { %>
                   <div class="word-content"></div>
               <% } %>
@@ -36,7 +36,8 @@
 
           <div class="topic-meta">
             <a style="margin-left: 10px" href="/t/<%= it.topicList.id %>">浏览器中打开</a>
-            <a class="collect">收藏</a>
+            <a class="collect" href="javascript:;" onclick="vsPostMessage('collect', {input:'<%= it.topicList.id %>',});">收藏</a>
+            <a class="collect" href="javascript:;" onclick="vsPostMessage('uncollect', {input:'<%= it.topicList.id %>',});">取消收藏</a>
             <a class="cite" href="javascript:;" onclick="vsPostMessage('reply', {input:'>>No.<%=it.topicList.id%>',});">引用</a>
             <a class="refresh" href="javascript:;" onclick="vsPostMessage('refresh', {});">刷新</a>
             <a class="reply-input" href="javascript:;" onclick="vsPostMessage('reply', {input:''});">回复</a>
@@ -94,7 +95,9 @@
                       <div class="content">
 
                         <% if (reply.img) { %>
-                            <div class="img-content"><img src="<%= it.imageUrlBase+ "thumb/" + reply.img + reply.ext %>" alt="image" /></div>
+                            <div class="img-content">
+                                <img src="<%= it.imageUrlBase+ "thumb/" + reply.img + reply.ext %>" alt="image" />
+                            </div>
                         <% } %>
                         <% if (reply.content) { %>
                             <div class="word-content"><%~ reply.content %></div>
