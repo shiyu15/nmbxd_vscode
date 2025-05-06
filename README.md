@@ -1,7 +1,7 @@
 # x岛的vscode插件客户端
 vscode插件商店里还没有x岛的客户端，写来上班摸鱼用的。
 
-vscode插件商店地址:
+vscode插件商店地址: https://marketplace.visualstudio.com/items?itemName=shiyu.nmbxd
 
 github repo: https://github.com/shiyu15/nmbxd_vscode
 # 使用
