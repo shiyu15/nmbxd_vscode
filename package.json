@@ -2,7 +2,9 @@
   "name": "nmbxd",
   "displayName": "x岛匿名版 xdnmb",
   "description": "x岛匿名版 vscode插件",
+  "publisher" : "shiyu15",
   "version": "0.0.1",
+  "icon": "images/icon.png",
   "engines": {
     "vscode": "^1.92.0"
   },
