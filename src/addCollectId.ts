@@ -8,7 +8,7 @@ import { NMBXD } from './nmbxd';
  */
 export default async function addCollectId(): Promise<boolean> {
   let userHash = await vscode.window.showInputBox({
-    placeHolder: 'x岛 订阅uuidid',
+    placeHolder: 'x岛 订阅uuid',
     prompt: '可以从手机客户端复制导入，网页端没有，直接确认会随机生成一个uuid',
     value: Global.getCollectId(),
   });
