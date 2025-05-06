@@ -1,15 +1,16 @@
 {
   "name": "nmbxd",
-  "displayName": "nmbxd",
-  "description": "a vscode plugin for ndnmb",
+  "displayName": "x岛匿名版 xdnmb",
+  "description": "x岛匿名版 vscode插件",
   "version": "0.0.1",
   "engines": {
-    "vscode": "^1.90.0"
+    "vscode": "^1.92.0"
   },
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+  ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
@@ -20,6 +21,14 @@
       {
         "command": "nmbxd.addCollectId",
         "title": "添加订阅ID"
+      },
+      {
+        "command": "nmbxd.forumItemClick",
+        "title": "打开分论坛"
+      },
+      {
+        "command": "nmbxd.topicClick",
+        "title": "打开帖子"
       }
     ],
     "menus": {
@@ -70,7 +79,6 @@
     "@vscode/test-cli": "^0.0.9",
     "@vscode/test-electron": "^2.4.0",
     "eslint": "^8.57.0",
-    "jsdom": "^25.0.1",
     "less": "^4.2.2",
     "request": "^2.88.2",
     "ts-node": "^10.9.2",
@@ -81,6 +89,11 @@
     "axios": "^1.7.7",
     "eta": "^3.5.0",
     "form-data": "^4.0.0",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "jsdom": "^25.0.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shiyu15/nmbxd_vscode.git"
   }
 }

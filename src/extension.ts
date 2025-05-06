@@ -21,47 +21,33 @@ export function activate(context: vscode.ExtensionContext) {
   // The command has been defined in the package.json file
   // Now provide the implementation of the command with registerCommand
   // The commandId parameter must match the command field in package.json
-  let disposable1 = vscode.commands.registerCommand('nmbxd.helloWorld', () => {
-    // The code you place here will be executed every time your command is executed
-    // Display a message box to the user
-    vscode.window.showInformationMessage('Hello World from nmbxd!');
-  });
 
-  let disposable2 = vscode.commands.registerCommand('nmbxd.login', () => {
+  let disposable1 = vscode.commands.registerCommand('nmbxd.login', () => {
     login();
   });
 
-  let disposable3 = vscode.commands.registerCommand('nmbxd.forumItemClick', (item: ForumItem) => {
+  let disposable2 = vscode.commands.registerCommand('nmbxd.forumItemClick', (item: ForumItem) => {
     console.log('打开分论坛');
     createForumItem(item);
   });
 
-  let disposable4 = vscode.commands.registerCommand('nmbxd.topicClick', (item: TopicList) => {
+  let disposable3 = vscode.commands.registerCommand('nmbxd.topicClick', (item: TopicList) => {
     console.log('打开帖子');
     createTopicItem(item);
   });
 
-  let disposable5 = vscode.commands.registerCommand('nmbxd.addCollectId', () => {
+  let disposable4 = vscode.commands.registerCommand('nmbxd.addCollectId', () => {
     console.log('添加订阅ID');
     addCollectId();
   });
-
-  // let disposable6 = vscode.commands.registerCommand('nmbxd.viewCollect', () => {
-  // 	console.log("查看订阅");
-  // 	viewCollect();
-  // });
 
   vscode.window.createTreeView('nmbxdForumList', {
     treeDataProvider: new DataProvider(),
     showCollapseAll: true,
   });
 
-  // vscode.window.createTreeView("nmbxdFavorites",{
-  // 	treeDataProvider: new DataProvider(),
-  // 	showCollapseAll: true}
-  // );
 
-  context.subscriptions.push(disposable1, disposable2, disposable3, disposable4, disposable5);
+  context.subscriptions.push(disposable1, disposable2, disposable3, disposable4);
 }
 
 // This method is called when your extension is deactivated

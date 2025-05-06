@@ -18,21 +18,21 @@ github repo: https://github.com/shiyu15/nmbxd_vscode
 欢迎提pr和issue，或者直接发邮件到 `m2457316417@outlook.com`
 
 # 感谢
-[xdcmd](https://github.com/TransparentLC/xdcmd)：一款命令行的python写的x岛客户端
+[xdcmd](https://github.com/TransparentLC/xdcmd): 一款命令行的python写的x岛客户端
 
-[x岛的api](https://github.com/TransparentLC/xdcmd/wiki/%E8%87%AA%E5%B7%B1%E6%95%B4%E7%90%86%E7%9A%84-X-%E5%B2%9B%E5%8C%BF%E5%90%8D%E7%89%88-API-%E6%96%87%E6%A1%A3)：xdcmd作者总结的x岛api，写的非常详细，帮了大忙
+[x岛的api](https://github.com/TransparentLC/xdcmd/wiki/%E8%87%AA%E5%B7%B1%E6%95%B4%E7%90%86%E7%9A%84-X-%E5%B2%9B%E5%8C%BF%E5%90%8D%E7%89%88-API-%E6%96%87%E6%A1%A3): xdcmd作者总结的x岛api，写的非常详细，帮了大忙
 
-[apifox上的x岛api](https://apifox.com/apidoc/shared/aedf55de-a60a-4d71-aa9a-d37458239a70/api-59384753):提供了多种语言的能跑通的x岛api，在前一个api文档出问题时可以结合这里调试
+[apifox上的x岛api](https://apifox.com/apidoc/shared/aedf55de-a60a-4d71-aa9a-d37458239a70/api-59384753): 提供了多种语言的能跑通的x岛api，在前一个api文档出问题时可以结合这里调试
 
-[nga-Mofish](https://github.com/DarrenIce/NGA-MoFish):nga的vscode插件
+[nga-Mofish](https://github.com/DarrenIce/NGA-MoFish): nga的vscode插件
 
-[opens1](https://github.com/NessajCN/opens1):s1的vscode插件
+[opens1](https://github.com/NessajCN/opens1): s1的vscode插件
 
 [vscode插件开发全攻略](https://www.cnblogs.com/liuxianan/p/vscode-plugin-overview.html)
 
 [vscode插件开发中文文档](https://rackar.github.io/vscode-ext-doccn/)
 
-[eta](https://www.etajs.cn/):eta模板引擎，处理html
+[eta](https://www.etajs.cn/): eta模板引擎，处理html
 
 # Todo list
 
