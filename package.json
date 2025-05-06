@@ -15,8 +15,7 @@
     "commands": [
       {
         "command": "nmbxd.login",
-        "title": "登录",
-        "icon": "./images/login.svg"
+        "title": "登录"
       },
       {
         "command": "nmbxd.addCollectId",

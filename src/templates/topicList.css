@@ -74,7 +74,7 @@ hr {
 }
 .topic-meta .userHash {
   margin-left: 0px;
-  color: aqua;
+  color: #46e0ad;
 }
 .topic-meta .topicId {
   margin-left: 10px;
@@ -97,7 +97,7 @@ hr {
 }
 .topic-meta .forumName {
   margin-left: 10px;
-  color: aqua;
+  color: #46e0ad;
 }
 .topic-meta .onlyAuthor {
   margin-left: 10px;
@@ -176,7 +176,7 @@ hr {
   margin-bottom: 8px;
 }
 .tooltip .tooltip-header .tooltip-hash {
-  color: aqua;
+  color: #46e0ad;
 }
 .tooltip .tooltip-header .tooltip-id {
   margin-left: 10px;

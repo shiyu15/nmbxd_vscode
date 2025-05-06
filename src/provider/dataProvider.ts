@@ -53,26 +53,41 @@ export class DataProvider implements TreeDataProvider<ForumItem> {
 
     getChildren(element?: ForumItem): ProviderResult<ForumItem[]> {
         if (element === undefined) {
-            // 返回顶层类别
-            return this.forumData.map(category =>{
-                //处理版块列表
-                let forum=new ForumItem(category.name, category.fid, TreeItemCollapsibleState.Collapsed,true,category.type===1,false);
-                //处理所属版块
+            // 创建自定义的收藏项
+            const collectItem = new ForumItem(
+                "我的收藏", // 标签名称
+                "collect", // 自定义ID
+                TreeItemCollapsibleState.None, // 不可折叠
+                false, // 不是目录
+                false, // 不是时间线
+                true   // 是收藏
+            );
+            
+            // 添加点击命令
+            collectItem.command = {
+                command: "nmbxd.forumItemClick",
+                title: "点击",
+                arguments: [collectItem]
+            };
+    
+            // 返回顶层类别，包括自定义的收藏项和原有的分类
+            return [collectItem, ...this.forumData.map(category => {
+                // 处理版块列表
+                let forum = new ForumItem(category.name, category.fid, TreeItemCollapsibleState.Collapsed, true, category.type === 1, false);
+                // 处理所属版块
                 forum.children = forum.children.concat(category.child.map(elementContent => {
-                    const child=new ForumItem(elementContent.name, elementContent.fid, TreeItemCollapsibleState.None,true,elementContent.type===1,false);
-                    child.threadNumber=elementContent.threadNumber;
-                    child.command={
-                        command:"nmbxd.forumItemClick",
-                        title:"点击",
-                        arguments:[child]
+                    const child = new ForumItem(elementContent.name, elementContent.fid, TreeItemCollapsibleState.None, true, elementContent.type === 1, false);
+                    child.threadNumber = elementContent.threadNumber;
+                    child.command = {
+                        command: "nmbxd.forumItemClick",
+                        title: "点击",
+                        arguments: [child]
                     };
                     return child;
                 }));
                 return forum;
-            } 
-                
-            );
-        } 
+            })];
+        }
         if(element.children){
             return element.children;
         }

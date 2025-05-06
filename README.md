@@ -1,71 +1,52 @@
-# nmbxd README
+# x岛的vscode插件客户端
+vscode插件商店里还没有x岛的客户端，写来上班摸鱼用的。
 
-This is the README for your extension "nmbxd". After writing up a brief description, we recommend including the following sections.
+vscode插件商店地址:
 
-## Features
+github repo: https://github.com/shiyu15/nmbxd_vscode
+# 使用
+第一次使用需要在插件的左上角，输入自己从x岛用户管理系统的二维码得到的cookie，类似这样`%B8H%1E5B%F6%F1%3B%08%98%C7Z%930X%H0%25a%0E`
+然后才能访问速报2等登陆后才能访问的版面
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+![登录界面](images/login.png)
 
-For example if there is an image subfolder under your extension project workspace:
+下面是样例
+![使用效果1](images/forum1.png)
+![使用效果2](images/forum2.png)
 
-\!\[feature X\]\(images/feature-x.png\)
+# 反馈
+欢迎提pr和issue，或者直接发邮件到 `m2457316417@outlook.com`
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+# 感谢
+[xdcmd](https://github.com/TransparentLC/xdcmd)：一款命令行的python写的x岛客户端
 
-## Requirements
+[x岛的api](https://github.com/TransparentLC/xdcmd/wiki/%E8%87%AA%E5%B7%B1%E6%95%B4%E7%90%86%E7%9A%84-X-%E5%B2%9B%E5%8C%BF%E5%90%8D%E7%89%88-API-%E6%96%87%E6%A1%A3)：xdcmd作者总结的x岛api，写的非常详细，帮了大忙
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+[apifox上的x岛api](https://apifox.com/apidoc/shared/aedf55de-a60a-4d71-aa9a-d37458239a70/api-59384753):提供了多种语言的能跑通的x岛api，在前一个api文档出问题时可以结合这里调试
 
-## Extension Settings
+[nga-Mofish](https://github.com/DarrenIce/NGA-MoFish):nga的vscode插件
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+[opens1](https://github.com/NessajCN/opens1):s1的vscode插件
 
-For example:
+[vscode插件开发全攻略](https://www.cnblogs.com/liuxianan/p/vscode-plugin-overview.html)
 
-This extension contributes the following settings:
+[vscode插件开发中文文档](https://rackar.github.io/vscode-ext-doccn/)
 
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
+[eta](https://www.etajs.cn/):eta模板引擎，处理html
 
-## Known Issues
+# Todo list
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+- [x] 1. 显示图片
+- [x] 2. 版块列表添加时间线
+- [ ] 3. 添加代理
+- [x] 4. 登录
+- [ ] 5. 显示收藏列表
+- [x] 6. 回帖
+- [x] 7. 回帖添加引用
+- [x] 8. 只看楼主
+- [ ] 9. 完善搜索信息
+- [x] 10. 输入串号，直达帖子
+- [ ] 11. 完善错误输出，能分辨出是网络错误还是未能登录。
+- [x] 12. 引用悬浮显示原帖
+- [x] 13. 翻页
 
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
-
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
